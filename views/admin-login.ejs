@@ -1,0 +1,32 @@
+<%- include ('./partials/header')  %>
+
+
+<div class="container container-form">
+    <div class="info">
+        <h2>Hi There,</h2>
+        <h2>This Is Admin Login Page</h2>
+    </div>
+
+  
+        <form action="/adminlogin" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Admin username" name="username">
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" type="password" placeholder="Admin password" name="password">
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+            </div>
+            <a href="/campground">Go Back</a>
+     </form>
+       
+
+    
+</div>
+
+
+
+<%- include ('./partials/footer')  %>~

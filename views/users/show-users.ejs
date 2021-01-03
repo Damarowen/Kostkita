@@ -1,0 +1,67 @@
+<%- include ('../partials/header')  %>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-5">
+            <h1 class="display-5 text-center">User Profile</h1>
+            <br>
+            <div class="container-avatar">
+                <img id="avatar" src="<%= user.avatar %>" class="img-thumbnail">
+                <div class="middle-avatar">
+                    <div class="text"><a href="/users/<%= user._id %>/edit"> Edit User </a></div>
+                </div>
+                    <table class="tableId ">
+                        <tr>
+                            <td>
+                                <h6><strong>Username</strong></h6>
+                            </td>
+                            <td>
+                                <h6><strong>Email</strong></h6>
+                            </td>
+                            <td>
+                                <h6><strong>Total Post</strong></h6>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6> <%= user.username %></h6>
+                            </td>
+                            <td>
+                                <h6><%= user.email %></h6>
+                            </td>
+                            <td>
+                                <h6><%= camp.length %></h6>
+                            </td>
+                        </tr>
+                    </table>
+            </div>
+            <br>
+
+
+        </div>
+
+        <div class="col-md-7 ">
+
+            <h1 class="display-5 text-center">Campground Post</h1>
+            <br>
+            <div style="margin-left: 3em;">
+                <ul>
+                    <% if(camp.length === 0) { %>
+                    <li>
+                        <h4>No Post Yet</h4>
+                    </li>
+                    <% } else { %>
+                    <%  for (const el of camp) { %>
+                    <li>
+                        <h4><a href="/campground/<%= el.id  %>"><%=  el.name %></a></h4>
+                    </li>
+                    <% }}  %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer')  %>

@@ -1,0 +1,235 @@
+html {
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 5rem;
+
+}
+
+.bg-pink {
+    background-color: pink !important;
+}
+
+
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: red;
+}
+
+.custom-file-container__image-preview {
+    background-size: contain !important;
+}
+
+.date {
+    display: flex;
+    justify-content: flex-end;
+    font-weight: 400;
+    padding-right: 10px;
+}
+
+/* Google Maps */
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+.tableId{
+    text-align: center;
+    margin: 1rem;
+    width: 100%;
+    position: relative;
+    border-collapse: separate;
+}
+
+.container-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    align-items: center;
+    margin: 20vh auto;
+}
+
+.review-form {
+    margin: 20px auto;
+    width: 50%;
+}
+
+.btn-collapse {
+    display: block;
+    margin-bottom: 15px;
+}
+
+
+@media (max-width: 768px) {
+
+    .container-form .info {
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+}
+
+
+.jumbotron {
+
+    background-color: #f0f0f0;
+    padding: 2rem 2rem;
+}
+
+
+.height {
+    height: 15em;
+}
+
+.fixed-top {
+    margin-bottom: 20px;
+    position: sticky;
+}
+
+.form {
+    width: 30%;
+    margin: 25px auto;
+}
+
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.img-thumbnail img {
+    max-height: 70vh;
+    padding: 0;
+}
+
+.img-thumbnail {
+    padding: 0;
+}
+
+.caption {
+    padding: 10px;
+}
+
+.card {
+    margin-top: 10px;
+}
+
+.footer {
+    padding-top: 20px;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+.showCollapse {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.showCollapseChild {
+    margin-right: 10px;
+}
+
+
+/* below is review css */
+
+#delete-button {
+    display: inline;
+}
+
+.checked {
+    color: orange;
+}
+
+/* below is avatar css */
+
+#avatar {
+    opacity: 1;
+    display: block;
+    max-width: 100%;
+    max-height: 15em;
+    transition: .5s ease;
+    object-fit: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.middle-avatar {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container-avatar:hover #avatar {
+    opacity: 0.5;
+}
+
+.container-avatar:hover .middle-avatar {
+    opacity: 1;
+}
+
+.text a {
+    background-color: steelblue;
+    color: white;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 10%;
+
+}
+
+
+/* * IMAGE UPLOAD AND PREVIEW */
+
+.wrapper {
+    min-height: 300px;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    background: #fff;
+    border: 2px dashed #c2cdda;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.wrapper>.preview>.delete>img {
+    height: 20vh;
+    border-radius: 5px;
+}
+
+
+.delete {
+    position: relative;
+    display: inline-block;
+}
+
+.delete .close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    padding-top: 5px ;
+    cursor: pointer;
+    opacity: .2;
+    font-size: 40px;
+    line-height: 10px;
+}
+.delete:hover .close {
+    opacity: 1;
+}
+
+
+
+
+
+/* * END */

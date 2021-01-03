@@ -1,0 +1,31 @@
+<%- include ('./partials/header')  %>
+
+
+<div class="container container-form">
+    <div class="info">
+        <h2>Hi There,</h2>
+        <h2>Please Login First</h2>
+    </div>
+
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="username" name="username">
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" type="password" placeholder="password" name="password">
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+            </div>
+            <a href="/campground">Go Back</a>
+     </form>
+       
+
+    
+</div>
+
+
+
+<%- include ('./partials/footer')  %>~
