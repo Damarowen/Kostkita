@@ -10,7 +10,9 @@ const express = require("express"),
 	passport = require("passport"),
 	localStrategy = require("passport-local"),
 	User = require("./models/user"),
-	flash = require("connect-flash")
+	flash = require("connect-flash"),
+	path = require('path')
+
 
 
 //requiring routes
@@ -32,7 +34,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride("_method"));
 mongoose.set('useFindAndModify', false); //supaya ga error untuk findByidAndUpdate dan Delete nya
 app.set("view engine", "ejs")

@@ -1,9 +1,12 @@
 function changeState() {
 
+    //**use this to parse camp id in url address bar */
+    const pathname = window.location.pathname; //campground/14124124
+    const id = pathname.split('/')[2]; //124124214
+    const url = `/campground/${id}/like`
     
-
-    var btnLike = document.getElementById('btnLike');
-    var btnUnlike = document.getElementById('btnUnlike');
+    const btnLike = document.getElementById('btnLike');
+    const btnUnlike = document.getElementById('btnUnlike');
 
     // btnLike True
     if (btnLike) {
@@ -23,13 +26,13 @@ function changeState() {
     }
 
     // insert logo thumbs up 
-    var fas = document.getElementById('fas');
+    const fas = document.getElementById('fas');
     fas.classList.add('fa-thumbs-up')
 
     //sent http request to sever with axios
     axios({
             method: 'post',
-            url: '/campground/<%= show_camp._id %>/like',
+            url: url,
             //use form encoded not aplication/json
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -41,5 +44,3 @@ function changeState() {
 
 }
 
-
-bsCustomFileInput.init()
