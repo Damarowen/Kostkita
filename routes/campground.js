@@ -7,12 +7,15 @@ const Middleware = require("../middleware/index")
 const {
     cloudinary
 } = require("../utils/cloudinary");
-var geocoder = require('../utils/geocoder');
+const geocoder = require('../utils/geocoder');
 
 
 
 
-//INDEX ROUTE - DISPLAY ALL CAMPGROUNDS
+//**INDEX ROUTE - DISPLAY ALL CAMPGROUNDS
+//** @route  /campground
+//** @access  Public
+
 router.get("/", function (req, res) {
 
     Campground_Model.find({}, function (err, allCampgrounds) {
@@ -25,11 +28,12 @@ router.get("/", function (req, res) {
         }
     })
 })
-//XXX
 
 
-//CREATE ROUTE - ADD NEW CAMPGROUND
-// upload.single('image') as middleware
+
+//**CREATE ROUTE - ADD NEW CAMPGROUND
+//** @route  /campground
+//** @access  Private
 router.post("/", Middleware.uploads, async function (req, res) {
 
     const addCamp = new Campground_Model(req.body.camp)
@@ -54,19 +58,18 @@ router.post("/", Middleware.uploads, async function (req, res) {
 
 
 
-
-//xxx
-
-//NEW ROUTE - DISPLAY FORM TO MAKE NEW CAMP
+//**RENDER NEW CAMP
+//** @route  /campground/new
+//** @access  Private
 router.get("/new", Middleware.isLogggedIn, function (req, res) {
-
     res.render("campground/new")
 })
 
 
-//SHOW ROUTE - DESCRIPTION PAGE
+//**SHOW CAMP
+//** @route  /campground/:ID
+//** @access  Public
 router.get("/:id", function (req, res) {
-    //findById adalah method dari Mongoose
     Campground_Model.findById(req.params.id).populate('likes').
     populate({
         path: "comment",
@@ -83,8 +86,8 @@ router.get("/:id", function (req, res) {
                 updatedAt: -1
             }
         }
-    }).exec((err, foundCamp) => { //populate merujuk ke obj di schema
-        if (err || !foundCamp) { //handle error jika data tdk ketemu
+    }).exec((err, foundCamp) => { //*populate merujuk ke obj di schema
+        if (err || !foundCamp) { //*handle error jika data tdk ketemu
             req.flash("error", "Campground Not Found CAMGROUND")
             res.redirect("back")
             console.log(err)
@@ -96,116 +99,134 @@ router.get("/:id", function (req, res) {
     })
 })
 
-// EDIT CAMPGROUND ROUTE
+//**RENDER EDIT CAMP
+//** @route  /campground/:ID/edit
+//** @access  Private
 router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
-    Campground_Model.findById(req.params.id, function (err, foundCampground) {
+    Campground_Model.findById(req.params.id, (err, found) => {
         res.render("campground/edit", {
-            edit_ejs: foundCampground
+            edit_ejs: found
         });
     });
 });
 
-// UPDATE CAMPGROUND ROUTE
+
+
+//**UPDATE CAMP
+//** @route  /campground/:ID
+//** @access  Private
 router.put("/:id", Middleware.uploads, async function (req, res) {
-    console.log(req.body)
-    // const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body);
-    // const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    // geocoder.geocode(req.body.location, async function (err, data) {
-    //     if (err || !data.length) {
-    //         req.flash('error', 'Invalid address');
-    //         return res.redirect('back');
-    //     }
-    //     console.log(data[0])
-    //     campground.lat = data[0].latitude;
-    //     campground.lng = data[0].longitude;
-    //     campground.location = data[0].formattedAddress;
-    //     campground.image.push(...imgs);
-    //     await campground.save();
-    //     console.log("Campground Updated via Cloudinary")
-    //     req.flash("success", "Successfully Updated!");
-    //     res.redirect(`/campground/${campground._id}`)
-    // })
+
+    const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body);
+    const imgs = req.files.map(f => ({
+        url: f.path,
+        filename: f.filename
+    }));
+    geocoder.geocode(req.body.location, async function (err, data) {
+        if (err || !data.length) {
+            req.flash('error', 'Invalid address');
+            return res.redirect('back');
+        }
+        console.log(data[0])
+        campground.lat = data[0].latitude;
+        campground.lng = data[0].longitude;
+        campground.location = data[0].formattedAddress;
+        campground.image.push(...imgs);
+        await campground.save();
+        console.log("Campground Updated via Cloudinary")
+        req.flash("success", "Successfully Updated!");
+        res.redirect(`/campground/${campground._id}`)
+    })
 
 })
 
 
-
+//**DELETE CAMP
+//** @route  /campground/:ID
+//** @access  Private
 router.delete("/:id", Middleware.checkCampOwner, function (req, res) {
 
-    // delete req.body.campground.rating
     Campground_Model.findById(req.params.id, async function (err, deleteCamp) {
-        if (!deleteCamp.imageId) {
-            // delete camp without image upload
-            Campground_Model.findByIdAndDelete(req.params.id, function (err) {
-                if (err) {
-                    req.flash("error", err.message)
-                    res.redirect("/campground")
+
+        try {
+
+            //* deletes all comments associated with the campground
+            Comment.deleteOne({
+                "_id": {
+                    $in: deleteCamp.comment
                 }
-                console.log("Camp Deleted");
-            });
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.redirect("/campground");
+                }
+                console.log("Comment Deleted from Campground");
+            })
 
-        }
+            //* deletes all reviews associated with the campground
+            Review.deleteOne({
+                "_id": {
+                    $in: deleteCamp.reviews
+                }
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.redirect("/campgrounds");
+                }
+                console.log("Review Deleted from Campground");
 
-        if (deleteCamp.imageId) {
-            // delete camp with image upload
-            try {
-                await cloudinary.v2.uploader.destroy(deleteCamp.imageId);
-                deleteCamp.remove();
-            } catch (err) {
-
-                req.flash("error", err.message);
-                return res.redirect("back");
-
-            } finally {
-                console.log("Camp Deleted from Server Cloudinary");
+            })
+            //*  delete image
+            for(const x of deleteCamp.image){
+                console.log(x)
+                await cloudinary.uploader.destroy(x.filename)
             }
-        }
 
-        // deletes all comments associated with the campground
-        Comment.deleteOne({
-            "_id": {
-                $in: deleteCamp.comment
-            }
-        }, function (err) {
-            if (err) {
-                console.log(err);
-                return res.redirect("/campground");
-            }
-            console.log("Review Deleted from Campground");
-        })
+            //*  delete the campground
+            await deleteCamp.remove();
+            req.flash("success", "Campground deleted successfully!");
+            res.redirect("/campground");
 
-        // deletes all reviews associated with the campground
-        Review.deleteOne({
-            "_id": {
-                $in: deleteCamp.reviews
-            }
-        }, function (err) {
-            if (err) {
-                console.log(err);
-                return res.redirect("/campgrounds");
-            }
-            console.log("Comment Deleted from Campground");
+        } catch (err) {
+            console.log(err)
+            req.flash("error", err.message);
+            return res.redirect("back");
+        } 
 
-        })
-        //  delete the campground
-        req.flash("success", "Campground deleted successfully!");
-        res.redirect("/campground");
     });
 });
+
+
+//**DELETE PHOTO CLIENT SIDE
+//** @route  /campground/:ID/:cloudinaryFolder/:imageId
+//** @access  Private
 
 router.post("/:id/KostKita/:imageid", async function (req, res) {
     try {
         const camp = await Campground_Model.findById(req.params.id)
-        const x = camp.image
-        x.deleteOne({
-            "filename": `KostKita/${req.params.imageid}`
-        }).then(result => console.log(`item ${result}`))
+        const file = `KostKita/${req.params.imageid}`
+        //*destroy in cloud
+        await cloudinary.uploader.destroy(file);
+        //*destroy in local
+        await camp.updateOne({
+            $pull: {
+                image: {
+                    filename: file
+                }
+            }
+        })
+        console.log(`${file} has been deleted`)
     } catch (err) {
         console.log(err)
     }
 })
 
-// Campground Like Route
+
+
+//**LIKE BUTTON
+//** @route  /campground/:ID/Like
+//** @access  Private
+
 router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
     Campground_Model.findById(req.params.id, function (err, foundCampground) {
         if (err) {
@@ -213,19 +234,19 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
             return res.redirect("/campground");
         }
 
-        // check if req.user._id exists in foundCampground.likes
-        var userAlreadyLike = foundCampground.likes.some(function (like) {
+        //* check if req.user._id exists in foundCampground.likes
+        const userAlreadyLike = foundCampground.likes.some(function (like) {
             return like.equals(req.user._id);
         });
 
         if (userAlreadyLike) {
-            // user already liked, removing like
+            //* user already liked, removing like
             foundCampground.likes.pull(req.user._id);
             console.log(`total likes ${foundCampground.likes.length}`)
             foundCampground.save()
             return res.redirect("/campground/" + foundCampground._id);
         } else {
-            // adding the new user like
+            //* adding the new user like
             foundCampground.likes.push(req.user);
             console.log(`total likes ${foundCampground.likes.length}`)
             foundCampground.save()

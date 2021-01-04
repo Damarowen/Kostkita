@@ -217,10 +217,9 @@ html {
     position: absolute;
     top: 2px;
     right: 2px;
-    z-index: 100;
     padding-top: 5px ;
     cursor: pointer;
-    opacity: .2;
+    opacity: 0.1;
     font-size: 40px;
     line-height: 10px;
 }

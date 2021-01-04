@@ -22,20 +22,19 @@
             <div class="wrapper">
 
                 <div class="preview">
+                    <!-- *if user not upload image, display no image -->
+                    <% if(edit_ejs.image) { %>
                     <% edit_ejs.image.forEach((img,i) => {%>
-
-
                     <div class="delete">
                         <span class="close">
-                            <i class="fas fa-window-close" onclick="test(this)">
+                            <i class="far fa-times-circle" onclick="test(this)" style="color: red;">
                                 <input type="hidden" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
                             </i>
                         </span>
                         <img class="responsive-img" src="<%=  img.url %>">
                     </div>
-
                     <% })%>
-
+                    <% }%>
 
                 </div>
             </div>
@@ -68,7 +67,6 @@
         <button class="btn btn-lg btn-primary btn-block">Submit</button>
         <a href="/campground">Go Back</a>
     </form>
-    <button onclick="test()"> </button>
 </div>
 
 <!-- file-upload-with-preview -->
@@ -77,28 +75,35 @@
 <script>
     var upload = new FileUploadWithPreview('myUniqueUploadId')
 
-    function test (x) {
+    function test(x) {
+
+        //parse campground id
         const pathname = window.location.pathname; //campground/14124124
         const id = pathname.split('/')[2]; //124124214
+        //parse image id
         const input = x.querySelector('input').value
         const imageId = input.split('/')[1]
+
         const url = `/campground/${id}/KostKita/${imageId}`
 
-    axios({
-            method: 'post',
-            url: url,
-            //use form encoded not aplication/json
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(res => {
-            console.log(res)
-            console.log('succeed')
-        });
-    }
+        axios({
+                method: 'post',
+                url: url,
+                //use form encoded not aplication/json
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(res => {
+                console.log(res)
+                console.log('succeed')
+            });
 
-   
+        const img = x.parentNode.parentNode.querySelector('img')
+        x.remove();
+        img.remove();
+
+    }
 </script>
 
 <%- include ('../partials/footer')  %>

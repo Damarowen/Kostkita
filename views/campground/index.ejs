@@ -20,7 +20,12 @@
 		<% all_Campgrounds.forEach(function(campground) { %>
 		<div class="col-lg-3">
 			<div class="card">
-				<img class="card-img-top" src="<%= campground.image[0].url %>" alt="Card image cap">
+				<!-- ** if user not upload photo, photo using img default -->
+				<% if(campground.image == 0){%> 
+					<img class="card-img-top" src="/img/default.png" alt="Card image cap">
+					<% } else if(campground.image.length > 0) { %>
+						<img class="card-img-top" src="<%= campground.image[0].url %>" alt="Card image cap">
+					<% } %>
 				<div class="card-body">
 					<h5 class="card-title"><strong><%= campground.name %>.</strong></h5>
 					<div>
