@@ -3,37 +3,11 @@ const Campground_Model = require("../models/campground_export")
 const Comment = require("../models/comment_export")
 const User = require("../models/user")
 
-// upload image
-const multer = require('multer');
-const {
-    storage
-} = require('../utils/cloudinary');
-
-
-// filter upload image only (jpg|jpeg|png|gif)
-const imageFilter = function (req, file, cb) {
-    // accept image files only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/i)) {
-        // To reject this file pass `false`, like so:
-        return cb('Error ! Please upload only Image this is from imagefilter');
-    }
-    // To accept the file pass `true`, like so:
-    cb(null, true);
-};
 
 
 
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1000000
-    }, // 10mb
-    fileFilter: imageFilter
-})
 
-
-
-//all the middleware goes here
+//*all the middleware goes here
 const middlewareObj = {}
 
 middlewareObj.isLogggedIn = (req, res, next) => {
@@ -46,16 +20,14 @@ middlewareObj.isLogggedIn = (req, res, next) => {
     }
 }
 
-//CAMP MIDDLEWARE
+//*CAMP MIDDLEWARE
 
 middlewareObj.checkCampOwner = (req, res, next) => {
 
     const id_data = req.params.id
     if (req.isAuthenticated()) {
         Campground_Model.findById(id_data, function (err, data) {
-            // var id_camp = data.author.id
-            // var id_user = req.user._id
-            //klo pake diatas flash yg dibawah jadi no use
+         
             if (err || !data) { //handle error jika data tdk ketemu
                 req.flash("error", "Campground Not Found")
                 res.redirect("back")
@@ -77,7 +49,7 @@ middlewareObj.checkCampOwner = (req, res, next) => {
     }
 }
 
-//COMMENNT MIDDLEWARE
+//*COMMENNT MIDDLEWARE
 
 middlewareObj.checkCommentExistence = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -134,7 +106,7 @@ middlewareObj.checkCommentOwner = (req, res, next) => {
 }
 
 
-//REVIEW MIDDLEWARE
+//*REVIEW MIDDLEWARE
 
 middlewareObj.checkReviewOwnership = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -186,7 +158,6 @@ middlewareObj.checkReviewExistence = function (req, res, next) {
 
 middlewareObj.checkUser = (req, res, next) => {
 
-
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash("error", "User Not Existed");
@@ -208,7 +179,35 @@ middlewareObj.checkUser = (req, res, next) => {
 
 
 
-// UPLOAD MIDDLEWARE
+//* UPLOAD MIDDLEWARE
+
+//* upload image
+const multer = require('multer');
+const {
+    storage
+} = require('../utils/cloudinary');
+
+
+//* filter upload image only (jpg|jpeg|png|gif)
+const imageFilter = function (req, file, cb) {
+    //* accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/i)) {
+        // To reject this file pass `false`, like so:
+        return cb('Error ! Please upload only Image this is from imagefilter');
+    }
+    //* To accept the file pass `true`, like so:
+    cb(null, true);
+};
+
+
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1000000
+    }, //* 10mb
+    fileFilter: imageFilter
+})
 
 middlewareObj.uploads = function (req, res, next) {
     upload.array('image', 5)(req, res, (err) => {
@@ -227,9 +226,10 @@ middlewareObj.uploads = function (req, res, next) {
 }
 
 
+//*this middleware for image max 3 limit for any upload
 middlewareObj.ValidateImage = function (req, res, next) {
 
-    function tes(num) {
+   const uploads = function(num) {
         upload.array('image', num)(req, res, (err) => {
             if (err instanceof multer.MulterError) {
                 console.log(err)
@@ -250,12 +250,14 @@ middlewareObj.ValidateImage = function (req, res, next) {
     Campground_Model.findById(req.params.id, (err, found) => {
         const max = 3;
         if (found.image.length == max) {
-            req.flash("error", "Error ! max 5 image ");
+            req.flash("error", "Error ! max 3 image ");
             return res.redirect("back");
         } else if (found.image.length == 2) {
-            tes(1)
+            uploads(1)
         } else if (found.image.length == 1) {
-            tes(2)
+            uploads(2)
+        } else  {
+            uploads(3)
         }
     })
 }

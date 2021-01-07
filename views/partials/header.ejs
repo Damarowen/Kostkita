@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>YelpCamp</title>
-	
+
 	<!-- boostrap below -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
 		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -19,8 +19,11 @@
 	<!-- image upload with review -->
 	<link rel="stylesheet" type="text/css"
 		href="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.css">
-	
 
+
+	<!-- mapbox -->
+	<script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
 
 </head>
 
@@ -28,7 +31,7 @@
 
 	<!-- ------------------------------- navbar -------------------------------- -->
 
-	<nav class="navbar navbar-expand-md navbar-light bg-pink fixed-top " >
+	<nav class="navbar navbar-expand-md navbar-light bg-pink fixed-top ">
 		<div class="container">
 			<a class="navbar-brand" href="/"> Yelp Camp</a>
 
@@ -74,7 +77,5 @@
 			<%= success %>
 		</div>
 		<% } %>
-		
+
 	</div>
-
-

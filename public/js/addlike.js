@@ -42,5 +42,6 @@ function changeState() {
             console.log(res)
         });
 
-}
+        location.reload()
+    }
 

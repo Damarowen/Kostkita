@@ -16,7 +16,7 @@
                 <% edit_ejs.image.forEach((img,i) => {%>
                 <div class="delete">
                     <span class="close">
-                        <i class="far fa-times-circle" onclick="test(this)" style="color: red;">
+                        <i class="far fa-times-circle" onclick="hapus(this)" style="color: red;">
                             <input type="hidden" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
                         </i>
                     </span>
@@ -71,51 +71,12 @@
     </form>
 </div>
 
-<!-- file-upload-with-preview -->
-<script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script>
 
+<script src="/js/deleteimage.js"></script>
+<!-- *file-upload-with-preview -->
+<script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script>
 <script>
     var upload = new FileUploadWithPreview('myUniqueUploadId')
-
-    function test(x) {
-
-        //parse campground id
-        const pathname = window.location.pathname; //campground/14124124
-        const id = pathname.split('/')[2]; //124124214
-        //parse image id
-        const input = x.querySelector('input').value
-        const imageId = input.split('/')[1]
-
-        const url = `/campground/${id}/KostKita/${imageId}`
-
-        axios({
-                method: 'post',
-                url: url,
-                //use form encoded not aplication/json
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            .then(res => {
-                console.log(res)
-                console.log('succeed')
-
-            });
-
-            location.reload()
-
-
-            // axios.get(`/campground/${id}/edit`)
-            // .then(res => {
-            //     console.log(res)
-            //     console.log('succeed')
-            // });
-
-        const img = x.parentNode.parentNode.querySelector('img')
-        x.remove();
-        img.remove();
-
-    }
 </script>
 
 <%- include ('../partials/footer')  %>

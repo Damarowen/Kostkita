@@ -357,10 +357,18 @@
 
     </div>
 </div>
-<script src="/js/addlike.js">
- 
+
+<!-- * mapbox script -->
+<!-- * line no 2 is for hook in back end, parse data to string and call in back -->
+<script>
+const mapToken = '<%-process.env.MAPBOX_API_KEY%>';
+const campground = <%- JSON.stringify(show_camp) %>
+
 </script>
 
+
+<script src="/js/addlike.js"></script>
+<script src="/js/map_show.js"></script>
+
 <%- include ('../partials/modal')  %>
-<%- include ('../partials/map')  %>
 <%- include ('../partials/footer')  %>

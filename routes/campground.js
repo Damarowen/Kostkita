@@ -7,8 +7,9 @@ const Middleware = require("../middleware/index")
 const {
     cloudinary
 } = require("../utils/cloudinary");
-const geocoder = require('../utils/geocoder');
-
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_API_KEY;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 
 
@@ -45,8 +46,12 @@ router.get("/new", Middleware.isLogggedIn, function (req, res) {
 //** @route  /campground
 //** @access  Private
 router.post("/", Middleware.uploads, async function (req, res) {
-
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.camp.location,
+        limit: 1
+    }).send()
     const addCamp = new Campground_Model(req.body.camp)
+    addCamp.geometry = geoData.body.features[0].geometry;
     addCamp.image = await req.files.map(f => ({
         url: f.path,
         filename: f.filename
@@ -56,6 +61,7 @@ router.post("/", Middleware.uploads, async function (req, res) {
         id: req.user._id,
         username: req.user.username
     }
+    console.log(addCamp)
     await addCamp.save()
         .then(() => req.flash("success", "Succesfully Added New Camp"))
         .then(() => res.redirect('/campground'))
@@ -123,6 +129,11 @@ router.put("/:id", Middleware.ValidateImage, async function (req, res) {
         url: f.path,
         filename: f.filename
     }));
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.location,
+        limit: 1
+    }).send()
+    campground.geometry = geoData.body.features[0].geometry;
     campground.image.push(...imgs);
     await campground.save();
     console.log("Campground Updated via Cloudinary")

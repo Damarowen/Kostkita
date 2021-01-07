@@ -36,7 +36,7 @@ html {
     width: 100%;
 }
 
-.tableId{
+.tableId {
     text-align: center;
     margin: 1rem;
     width: 100%;
@@ -73,9 +73,15 @@ html {
 
 
 .jumbotron {
+    background-image: url('/img/background.jpg');
+    background-size: cover;
+background-position: center;  
+}
 
-    background-color: #f0f0f0;
-    padding: 2rem 2rem;
+.head {
+    color: white;
+    text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+    font-size: 3.5em;
 }
 
 
@@ -84,7 +90,6 @@ html {
 }
 
 .fixed-top {
-    margin-bottom: 20px;
     position: sticky;
 }
 
@@ -204,7 +209,7 @@ html {
 
 .wrapper>.preview>.delete>img {
     height: 30vh;
-    width: 20vw;
+    width: 10vw;
     border-radius: 5px;
 }
 
@@ -218,24 +223,26 @@ html {
     position: absolute;
     top: 2px;
     right: 2px;
-    padding-top: 5px ;
+    padding-top: 5px;
     cursor: pointer;
     opacity: 0.1;
     font-size: 40px;
     line-height: 10px;
 }
+
 .delete:hover .close {
     opacity: 1;
 }
 
-.carousel-item > img {
-    height:70vh;
+.carousel-item>img {
+    height: 70vh;
     max-width: 50vw;
 }
 
 
 
-.carousel-control-next-icon, .carousel-control-prev-icon {
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
     background-color: gray;
 }
 

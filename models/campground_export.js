@@ -13,8 +13,17 @@ const campgroundSchema = new mongoose.Schema({
     }],
     description: String,
     location: String,
-    lat: Number,
-    lng: Number,
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -52,17 +61,6 @@ const campgroundSchema = new mongoose.Schema({
 //     next();
 // });
 
-//* Middleware geocde & create location
-//* pre sebelum save
-campgroundSchema.pre('save', async function (next) {
-    const loc = await geocoder.geocode(this.location);
-    console.log(this.likes.length)
-    this.lat = loc[0].latitude;
-    this.lng = loc[0].longitude;
-    this.location = loc[0].formattedAddress;
-    console.log(this.location)
-    next();
-});
 
 
 
