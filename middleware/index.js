@@ -5,7 +5,9 @@ const User = require("../models/user")
 
 // upload image
 const multer = require('multer');
-const { storage } = require('../utils/cloudinary');
+const {
+    storage
+} = require('../utils/cloudinary');
 
 
 // filter upload image only (jpg|jpeg|png|gif)
@@ -13,7 +15,7 @@ const imageFilter = function (req, file, cb) {
     // accept image files only
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/i)) {
         // To reject this file pass `false`, like so:
-        return cb('Error ! Please upload only Image');
+        return cb('Error ! Please upload only Image this is from imagefilter');
     }
     // To accept the file pass `true`, like so:
     cb(null, true);
@@ -24,7 +26,7 @@ const imageFilter = function (req, file, cb) {
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 10000000
+        fileSize: 1000000
     }, // 10mb
     fileFilter: imageFilter
 })
@@ -209,17 +211,51 @@ middlewareObj.checkUser = (req, res, next) => {
 // UPLOAD MIDDLEWARE
 
 middlewareObj.uploads = function (req, res, next) {
-    upload.array('image')(req, res, (err) => {
+    upload.array('image', 5)(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             console.log(err)
-            req.flash("error", "Error ! File is too big");
+            req.flash("error", "File is too big or Max file choose reached");
             res.redirect("back");
         } else if (err) {
             console.log(err)
-            req.flash("error", "Error ! Please upload only Image");
+            req.flash("error", "Error ! Please upload only Imagee");
             res.redirect("back");
         } else {
             next()
+        }
+    })
+}
+
+
+middlewareObj.ValidateImage = function (req, res, next) {
+
+    function tes(num) {
+        upload.array('image', num)(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                console.log(err)
+                req.flash("error", "File is too big or Max file choose reached");
+                res.redirect("back");
+            } else if (err) {
+                console.log(err)
+                req.flash("error", "Error ! Please upload only Imagee");
+                res.redirect("back");
+            } else {
+                console.log(req.files)
+                next();
+            }
+        })
+    }
+
+
+    Campground_Model.findById(req.params.id, (err, found) => {
+        const max = 3;
+        if (found.image.length == max) {
+            req.flash("error", "Error ! max 5 image ");
+            return res.redirect("back");
+        } else if (found.image.length == 2) {
+            tes(1)
+        } else if (found.image.length == 1) {
+            tes(2)
         }
     })
 }

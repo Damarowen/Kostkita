@@ -1,9 +1,9 @@
-var mongoose = require("mongoose");
-var geocoder = require('../utils/geocoder');
+const mongoose = require("mongoose");
+const geocoder = require('../utils/geocoder');
 
 
 
-var campgroundSchema = new mongoose.Schema({
+const campgroundSchema = new mongoose.Schema({
 
     name: String,
     price: String,
@@ -45,8 +45,15 @@ var campgroundSchema = new mongoose.Schema({
 })
 
 
-// Middleware geocde & create location
-// pre sebelum save
+// campgroundSchema.pre('save', function(req, res, next) {
+//     if (this.image.length > 1) throw(" exceeds maximum array size (5)!");
+//     req.flash('error', 'maximum reached')
+//     res.redirect('back')
+//     next();
+// });
+
+//* Middleware geocde & create location
+//* pre sebelum save
 campgroundSchema.pre('save', async function (next) {
     const loc = await geocoder.geocode(this.location);
     console.log(this.likes.length)

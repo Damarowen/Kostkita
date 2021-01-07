@@ -31,6 +31,16 @@ router.get("/", function (req, res) {
 
 
 
+//**RENDER NEW CAMP
+//** @route  /campground/new
+//** @access  Private
+router.get("/new", Middleware.isLogggedIn, function (req, res) {
+    res.render("campground/new")
+})
+
+
+
+
 //**CREATE ROUTE - ADD NEW CAMPGROUND
 //** @route  /campground
 //** @access  Private
@@ -46,7 +56,6 @@ router.post("/", Middleware.uploads, async function (req, res) {
         id: req.user._id,
         username: req.user.username
     }
-    console.log(addCamp)
     await addCamp.save()
         .then(() => req.flash("success", "Succesfully Added New Camp"))
         .then(() => res.redirect('/campground'))
@@ -56,14 +65,6 @@ router.post("/", Middleware.uploads, async function (req, res) {
 
 });
 
-
-
-//**RENDER NEW CAMP
-//** @route  /campground/new
-//** @access  Private
-router.get("/new", Middleware.isLogggedIn, function (req, res) {
-    res.render("campground/new")
-})
 
 
 //**SHOW CAMP
@@ -106,7 +107,7 @@ router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
     Campground_Model.findById(req.params.id, (err, found) => {
         res.render("campground/edit", {
             edit_ejs: found
-        });
+        })
     });
 });
 
@@ -115,29 +116,18 @@ router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
 //**UPDATE CAMP
 //** @route  /campground/:ID
 //** @access  Private
-router.put("/:id", Middleware.uploads, async function (req, res) {
+router.put("/:id", Middleware.ValidateImage, async function (req, res) {
 
     const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body);
     const imgs = req.files.map(f => ({
         url: f.path,
         filename: f.filename
     }));
-    geocoder.geocode(req.body.location, async function (err, data) {
-        if (err || !data.length) {
-            req.flash('error', 'Invalid address');
-            return res.redirect('back');
-        }
-        console.log(data[0])
-        campground.lat = data[0].latitude;
-        campground.lng = data[0].longitude;
-        campground.location = data[0].formattedAddress;
-        campground.image.push(...imgs);
-        await campground.save();
-        console.log("Campground Updated via Cloudinary")
-        req.flash("success", "Successfully Updated!");
-        res.redirect(`/campground/${campground._id}`)
-    })
-
+    campground.image.push(...imgs);
+    await campground.save();
+    console.log("Campground Updated via Cloudinary")
+    req.flash("success", "Successfully Updated!");
+    res.redirect(`/campground/${campground._id}`)
 })
 
 
@@ -177,7 +167,7 @@ router.delete("/:id", Middleware.checkCampOwner, function (req, res) {
 
             })
             //*  delete image
-            for(const x of deleteCamp.image){
+            for (const x of deleteCamp.image) {
                 console.log(x)
                 await cloudinary.uploader.destroy(x.filename)
             }
@@ -191,7 +181,7 @@ router.delete("/:id", Middleware.checkCampOwner, function (req, res) {
             console.log(err)
             req.flash("error", err.message);
             return res.redirect("back");
-        } 
+        }
 
     });
 });
@@ -205,8 +195,7 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
     try {
         const camp = await Campground_Model.findById(req.params.id)
         const file = `KostKita/${req.params.imageid}`
-        //*destroy in cloud
-        await cloudinary.uploader.destroy(file);
+
         //*destroy in local
         await camp.updateOne({
             $pull: {
@@ -215,7 +204,11 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
                 }
             }
         })
-        console.log(`${file} has been deleted`)
+        //*destroy in cloud
+        await cloudinary.uploader.destroy(file)
+        console.log(`${file} Deleted...`)
+      await  req.flash('success', `${file} Deleted`)
+      await  res.redirect('back')
     } catch (err) {
         console.log(err)
     }

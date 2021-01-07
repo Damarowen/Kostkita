@@ -70,6 +70,11 @@ app.use(function (req, res, next) { //passing ke app use
 
 })
 
+
+app.use(flash()); 
+
+
+
 //END//
 
 //ROUTERS

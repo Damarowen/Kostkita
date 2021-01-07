@@ -1,10 +1,34 @@
 <%- include ('../partials/header')  %>
 
 
-<div class="container">
+    <div class="container">
     <div id="info" class="text-center mt-5">
         <h1>Edit <em><%= edit_ejs.name %> </em></h1>
     </div>
+
+    <div class="image-preview-deleted">
+        <label for="image">Image Delete Choose</label>
+        <div class="wrapper">
+
+            <div class="preview">
+                <!-- *if user not upload image, display no image -->
+                <% if(edit_ejs.image) { %>
+                <% edit_ejs.image.forEach((img,i) => {%>
+                <div class="delete">
+                    <span class="close">
+                        <i class="far fa-times-circle" onclick="test(this)" style="color: red;">
+                            <input type="hidden" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                        </i>
+                    </span>
+                    <img class="responsive-img" src="<%=  img.url %>">
+                </div>
+                <% })%>
+                <% }%>
+
+            </div>
+        </div>
+    </div>
+
 
     <form action="/campground/<%= edit_ejs._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="mt-5">
         <div class="form-group">
@@ -17,29 +41,7 @@
             <input class="form-control" type="number" min="1" step="1" name="price" value="<%= edit_ejs.price %>">
         </div>
 
-        <div class="image-preview-deleted">
-            <label for="image">Image</label>
-            <div class="wrapper">
-
-                <div class="preview">
-                    <!-- *if user not upload image, display no image -->
-                    <% if(edit_ejs.image) { %>
-                    <% edit_ejs.image.forEach((img,i) => {%>
-                    <div class="delete">
-                        <span class="close">
-                            <i class="far fa-times-circle" onclick="test(this)" style="color: red;">
-                                <input type="hidden" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
-                            </i>
-                        </span>
-                        <img class="responsive-img" src="<%=  img.url %>">
-                    </div>
-                    <% })%>
-                    <% }%>
-
-                </div>
-            </div>
-        </div>
-
+   
         <div class="custom-file-container mt-5" data-upload-id="myUniqueUploadId">
             <label>Upload File <a href="javascript:void(0)" class="custom-file-container__image-clear"
                     title="Clear Image">&times;</a></label>
@@ -97,7 +99,17 @@
             .then(res => {
                 console.log(res)
                 console.log('succeed')
+
             });
+
+            location.reload()
+
+
+            // axios.get(`/campground/${id}/edit`)
+            // .then(res => {
+            //     console.log(res)
+            //     console.log('succeed')
+            // });
 
         const img = x.parentNode.parentNode.querySelector('img')
         x.remove();
