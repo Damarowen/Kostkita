@@ -9,14 +9,13 @@
     <div class="image-preview-deleted">
         <label for="image">Image Delete Choose</label>
         <div class="wrapper">
-
             <div class="preview text-center">
                 <!-- *if user not upload image, display no image -->
                 <% if(edit_ejs.image) { %>
                 <% edit_ejs.image.forEach((img,i) => {%>
                 <div class="delete">
                     <span class="close">
-                        <i class="far fa-times-circle" onclick="hapus(this)" style="color: red;">
+                        <i class="far fa-trash-alt" onclick="hapus(this)" style="color: red;">
                             <input type="hidden" value="<%=img.filename%>">
                         </i>
                     </span>
@@ -30,15 +29,15 @@
     </div>
 
 
-    <form action="/campground/<%= edit_ejs._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="mt-5">
+    <form action="/campground/<%= edit_ejs._id %>?_method=PUT"  class="mt-5 validated-form" novalidate method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="name">Name</label>
-            <input class="form-control" type="text" name="name" value="<%= edit_ejs.name %>">
+            <input class="form-control" type="text" name="name" value="<%= edit_ejs.name %>" required>
         </div>
 
         <div class="form-group">
             <label for="price">Price</label>
-            <input class="form-control" type="number" min="1" step="1" name="price" value="<%= edit_ejs.price %>">
+            <input class="form-control" type="number" min="1" step="1" name="price" value="<%= edit_ejs.price %>" required>
         </div>
 
    
@@ -57,13 +56,13 @@
         <div class="form-group">
             <label for="Location">Location</label>
 
-            <input class="form-control" type="text" name="location" id="location" value="<%= edit_ejs.location %>">
+            <input class="form-control" type="text" name="location" id="location" value="<%= edit_ejs.location %>" required>
         </div>
 
         <div class="form-group">
             <label for="Description<">Description</label>
 
-            <input class="form-control" type="text" name="description" value="<%= edit_ejs.description %>">
+            <input class="form-control" type="text" name="description" value="<%= edit_ejs.description %>" required>
         </div>
 
         <button class="btn btn-lg btn-primary btn-block">Submit</button>
@@ -72,11 +71,9 @@
 </div>
 
 
-<script src="/js/deleteimage.js"></script>
 <!-- *file-upload-with-preview -->
 <script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script>
-<script>
-    var upload = new FileUploadWithPreview('myUniqueUploadId')
-</script>
+<script src="/js/fileupload.js"></script>
+
 
 <%- include ('../partials/footer')  %>

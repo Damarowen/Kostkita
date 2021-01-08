@@ -1,7 +1,7 @@
-var mongoose = require("mongoose")
+const mongoose = require("mongoose")
 
 
-var commentSchema = mongoose.Schema({
+const commentSchema = mongoose.Schema({
 
     text: {
         type: String
@@ -14,12 +14,12 @@ var commentSchema = mongoose.Schema({
         username: String
     }
 }, {
-    // if timestamps are set to true, mongoose assigns createdAt and updatedAt fields to your schema, the type assigned is Date.
+    //* if timestamps are set to true, mongoose assigns createdAt and updatedAt fields to your schema, the type assigned is Date.
     timestamps: true
 
 })
 
 
-// var Book = mongoose.model(<model_name>, BookSchema, <collection_name>);
+//* const Book = mongoose.model(<model_name>, BookSchema, <collection_name>);
 
 module.exports = mongoose.model("Comment", commentSchema, "Comment")

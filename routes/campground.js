@@ -9,7 +9,9 @@ const {
 } = require("../utils/cloudinary");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_API_KEY;
-const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
+const geocoder = mbxGeocoding({
+    accessToken: mapBoxToken
+});
 
 
 
@@ -46,26 +48,30 @@ router.get("/new", Middleware.isLogggedIn, function (req, res) {
 //** @route  /campground
 //** @access  Private
 router.post("/", Middleware.uploads, async function (req, res) {
-    const geoData = await geocoder.forwardGeocode({
-        query: req.body.camp.location,
-        limit: 1
-    }).send()
-    const addCamp = new Campground_Model(req.body.camp)
-    addCamp.geometry = geoData.body.features[0].geometry;
-    addCamp.image = await req.files.map(f => ({
-        url: f.path,
-        filename: f.filename
-    }));
-    // add author to campground
-    addCamp.author = {
-        id: req.user._id,
-        username: req.user.username
+    try {
+        const geoData = await geocoder.forwardGeocode({
+            query: req.body.camp.location,
+            limit: 1
+        }).send()
+        const addCamp = new Campground_Model(req.body.camp)
+        addCamp.geometry = geoData.body.features[0].geometry;
+        addCamp.image = await req.files.map(f => ({
+            url: f.path,
+            filename: f.filename
+        }));
+        // add author to campground
+        addCamp.author = {
+            id: req.user._id,
+            username: req.user.username
+        }
+        console.log(addCamp)
+        await addCamp.save()
+            .then(() => req.flash("success", "Succesfully Added New Camp"))
+            .then(() => res.redirect('/campground'))
+            .catch(error => console.log(error.message));
+    } catch (err) {
+        console.log(err)
     }
-    console.log(addCamp)
-    await addCamp.save()
-        .then(() => req.flash("success", "Succesfully Added New Camp"))
-        .then(() => res.redirect('/campground'))
-        .catch(error => console.log(error.message));
 
 
 
@@ -77,33 +83,41 @@ router.post("/", Middleware.uploads, async function (req, res) {
 //** @route  /campground/:ID
 //** @access  Public
 router.get("/:id", function (req, res) {
-    Campground_Model.findById(req.params.id).populate('likes').
-    populate({
-        path: "comment",
-        options: {
-            sort: {
-                updatedAt: -1
+    try{
+        Campground_Model.findById(req.params.id).populate('likes').
+        populate({
+            path: "comment",
+            options: {
+                sort: {
+                    updatedAt: -1
+                }
             }
-        }
-    }).
-    populate({
-        path: "reviews",
-        options: {
-            sort: {
-                updatedAt: -1
+        }).
+        populate({
+            path: "reviews",
+            options: {
+                sort: {
+                    updatedAt: -1
+                }
             }
-        }
-    }).exec((err, foundCamp) => { //*populate merujuk ke obj di schema
-        if (err || !foundCamp) { //*handle error jika data tdk ketemu
-            req.flash("error", "Campground Not Found CAMGROUND")
-            res.redirect("back")
-            console.log(err)
-        } else {
-            res.render("campground/show", {
-                show_camp: foundCamp
-            })
-        }
-    })
+        }).exec((err, foundCamp) => { //*populate merujuk ke obj di schema
+            if (err || !foundCamp) { //*handle error jika data tdk ketemu
+                req.flash("error", "Campground Not Found CAMGROUND")
+                res.redirect("back")
+                console.log(err)
+            } else {
+                res.render("campground/show", {
+                    show_camp: foundCamp
+                })
+            }
+        })
+    }
+    catch(err){
+        //* display error from mongoose validation
+        console.log(err)
+        req.flash("error", `error`);
+        res.redirect(`back`)
+    }
 })
 
 //**RENDER EDIT CAMP
@@ -123,7 +137,7 @@ router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
 //** @route  /campground/:ID
 //** @access  Private
 router.put("/:id", Middleware.ValidateImage, async function (req, res) {
-
+try{
     const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body);
     const imgs = req.files.map(f => ({
         url: f.path,
@@ -139,6 +153,13 @@ router.put("/:id", Middleware.ValidateImage, async function (req, res) {
     console.log("Campground Updated via Cloudinary")
     req.flash("success", "Successfully Updated!");
     res.redirect(`/campground/${campground._id}`)
+}
+    catch(err){
+        //* display error from mongoose validation
+        const message = Object.values(err.errors).map(val => val);
+        req.flash("error", `${message}`);
+        res.redirect(`back`)
+    }
 })
 
 
@@ -220,6 +241,8 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
         console.log(`${file} Deleted...`)
     } catch (err) {
         console.log(err)
+        req.flash("error", err.message);
+        return res.redirect("back");
     }
 })
 
@@ -230,32 +253,40 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
 //** @access  Private
 
 router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
-    Campground_Model.findById(req.params.id, function (err, foundCampground) {
-        if (err) {
-            console.log(err);
-            return res.redirect("/campground");
-        }
-
-        //* check if req.user._id exists in foundCampground.likes
-        const userAlreadyLike = foundCampground.likes.some(function (like) {
-            return like.equals(req.user._id);
+    try {
+        Campground_Model.findById(req.params.id, function (err, foundCampground) {
+            if (err) {
+                console.log(err);
+                return res.redirect("/campground");
+            }
+    
+            //* check if req.user._id exists in foundCampground.likes
+            const userAlreadyLike = foundCampground.likes.some(function (like) {
+                return like.equals(req.user._id);
+            });
+    
+            if (userAlreadyLike) {
+                //* user already liked, removing like
+                foundCampground.likes.pull(req.user._id);
+                console.log(`total likes ${foundCampground.likes.length}`)
+                foundCampground.save()
+                return res.redirect("/campground/" + foundCampground._id);
+            } else {
+                //* adding the new user like
+                foundCampground.likes.push(req.user);
+                console.log(`total likes ${foundCampground.likes.length}`)
+                foundCampground.save()
+                return res.redirect("/campground/" + foundCampground._id);
+            }
+    
         });
-
-        if (userAlreadyLike) {
-            //* user already liked, removing like
-            foundCampground.likes.pull(req.user._id);
-            console.log(`total likes ${foundCampground.likes.length}`)
-            foundCampground.save()
-            return res.redirect("/campground/" + foundCampground._id);
-        } else {
-            //* adding the new user like
-            foundCampground.likes.push(req.user);
-            console.log(`total likes ${foundCampground.likes.length}`)
-            foundCampground.save()
-            return res.redirect("/campground/" + foundCampground._id);
-        }
-
-    });
+    } catch(err){
+        console.log(err)
+        req.flash("error", err.message);
+        return res.redirect("back");
+        
+    }
+   
 });
 
 module.exports = router;

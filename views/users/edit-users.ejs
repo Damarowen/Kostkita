@@ -6,18 +6,21 @@
         Edit User Profile
     </h1>
 
-    <form class="form" action="/users/<%= user._id %>?_method=PUT " method="POST">
+    <form class="form validated-form" action="/users/<%= user._id %>?_method=PUT " novalidate method="POST">
         
         <div class="form-group">
-            <input class="form-control" type="text" name="editUser[username]"  value="<%= user.username %>">
+            <label for="Username">Username </label>
+            <input class="form-control" type="text" name="editUser[username]"  value="<%= user.username %>" required disabled>
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="editUser[email]"  value="<%= user.email %>">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" name="editUser[email]"  value="<%= user.email %>" required>
         </div>
 
         <div class="form-group">
-            <input class="form-control" type="text" name="editUser[avatar]"  value="<%= user.avatar %>">
+            <label for="avatar">Avatar</label>
+            <input class="form-control" type="text" name="editUser[avatar]"  value="<%= user.avatar %>" required>
         </div>
 
         <button class="btn btn-lg btn-primary btn-block">Submit</button>

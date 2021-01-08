@@ -1,18 +1,30 @@
 const mongoose = require("mongoose");
-const geocoder = require('../utils/geocoder');
 
 
 
 const campgroundSchema = new mongoose.Schema({
 
-    name: String,
-    price: String,
+    name: {
+        type: String,
+        trim: true,
+        required: [true, 'Please add a name']
+    },
+    price: {
+        type: String,
+        required: [true, 'Please add a price']
+    },
     image: [{
         url: String,
-        filename: String
+        filename: String,
     }],
-    description: String,
-    location: String,
+    description: {
+        type: String,
+        required: [true, 'Please add a description']
+    },
+    location:  {
+        type: String,
+        required: [true, 'Please add a location']
+    },
     geometry: {
         type: {
             type: String,
@@ -54,12 +66,6 @@ const campgroundSchema = new mongoose.Schema({
 })
 
 
-// campgroundSchema.pre('save', function(req, res, next) {
-//     if (this.image.length > 1) throw(" exceeds maximum array size (5)!");
-//     req.flash('error', 'maximum reached')
-//     res.redirect('back')
-//     next();
-// });
 
 
 

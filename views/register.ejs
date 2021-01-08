@@ -10,17 +10,17 @@
   
  
   
-        <form action="/register" method="POST" >
+        <form action="/register" novalidate class="validated-form" method="POST" >
             <div class="form-group">
-                <input class="form-control"  type="text" placeholder="username" name="username">
+                <input class="form-control"  type="text" placeholder="username" name="username" >
             </div>
       
             <div class="form-group">
-                <input class="form-control" type="password" placeholder="password" name="password">
+                <input class="form-control" type="password" placeholder="password" name="password" >
             </div>
 
             <div class="form-group">
-                <input class="form-control" type="email" placeholder="@gmail.com" name="email">
+                <input class="form-control" type="email" placeholder="@gmail.com" name="email" required>
             </div>
 
             <div class="form-group">

@@ -73,9 +73,11 @@ html {
 
 
 .jumbotron {
-    background-image: url('/img/background.jpg');
+    background-image: url(/img/background.jpg);
     background-size: cover;
-background-position: center;  
+    background-position: center;
+    margin-top: -20px;
+    height: 35vh;
 }
 
 .head {
@@ -91,6 +93,7 @@ background-position: center;
 
 .fixed-top {
     position: sticky;
+    margin-bottom: 10px;
 }
 
 .form {
@@ -209,7 +212,7 @@ background-position: center;
 
 .wrapper>.preview>.delete>img {
     height: 30vh;
-    min-width: 20vw;
+    min-width: 10vw;
     max-width: 50vw;
     border-radius: 5px;
 }
@@ -236,7 +239,7 @@ background-position: center;
 }
 
 .carousel-item>img {
-    min-width: 50vw;
+    min-width: 20vw;
     min-height: 35vh;
     max-height: 70vh;
 }
