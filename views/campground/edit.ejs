@@ -1,7 +1,7 @@
 <%- include ('../partials/header')  %>
 
 
-    <div class="container">
+    <div class="container edit">
     <div id="info" class="text-center mt-5">
         <h1>Edit <em><%= edit_ejs.name %> </em></h1>
     </div>
@@ -10,14 +10,14 @@
         <label for="image">Image Delete Choose</label>
         <div class="wrapper">
 
-            <div class="preview">
+            <div class="preview text-center">
                 <!-- *if user not upload image, display no image -->
                 <% if(edit_ejs.image) { %>
                 <% edit_ejs.image.forEach((img,i) => {%>
                 <div class="delete">
                     <span class="close">
                         <i class="far fa-times-circle" onclick="hapus(this)" style="color: red;">
-                            <input type="hidden" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                            <input type="hidden" value="<%=img.filename%>">
                         </i>
                     </span>
                     <img class="responsive-img" src="<%=  img.url %>">

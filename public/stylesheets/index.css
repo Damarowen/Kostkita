@@ -209,7 +209,8 @@ background-position: center;
 
 .wrapper>.preview>.delete>img {
     height: 30vh;
-    width: 10vw;
+    min-width: 20vw;
+    max-width: 50vw;
     border-radius: 5px;
 }
 
@@ -235,8 +236,9 @@ background-position: center;
 }
 
 .carousel-item>img {
-    height: 70vh;
-    max-width: 50vw;
+    min-width: 50vw;
+    min-height: 35vh;
+    max-height: 70vh;
 }
 
 

@@ -218,8 +218,6 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
         //*destroy in cloud
         await cloudinary.uploader.destroy(file)
         console.log(`${file} Deleted...`)
-      await  req.flash('success', `${file} Deleted`)
-      await  res.redirect('back')
     } catch (err) {
         console.log(err)
     }
