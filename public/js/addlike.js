@@ -11,7 +11,7 @@ function changeState() {
     // btnLike True
     if (btnLike) {
 
-        btnLike.setAttribute('class', 'btn btn-sm btn-success')
+        btnLike.setAttribute('class', 'btn btn-sm btn-pink')
         // redefine inside button tag
         btnLike.innerHTML = "<span><i id=fas class=fas ></i></span> You Like This Post"
         // chang id to button unlike for next click

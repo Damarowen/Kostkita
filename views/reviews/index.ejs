@@ -50,7 +50,7 @@
                     <% }); %>
                     <% } %>
                     <div>
-                        <a class="btn btn-primary <% if (currentUser && campground.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> 
+                        <a class="btn btn-pink <% if (currentUser && campground.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> 
                             disabled <% } %>" href="/campground/<%= campground._id %>/reviews/new">
                             Write a New Review</a>
                     </div>

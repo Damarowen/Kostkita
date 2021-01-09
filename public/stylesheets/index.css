@@ -1,3 +1,7 @@
+:root {
+    --nav: #FF6060;
+}
+
 html {
     position: relative;
     min-height: 100%;
@@ -6,18 +10,23 @@ html {
 }
 
 .bg-pink {
-    background-color: pink !important;
+    background-color: var(--nav) !important;
 }
 
 
 
-.navbar-light .navbar-nav .nav-link {
+.navbar-light .navbar-nav .nav-link,
+.footer {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
     color: black;
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    color: red;
+    color: white;
 }
+
+
 
 .custom-file-container__image-preview {
     background-size: contain !important;
@@ -62,27 +71,17 @@ html {
 }
 
 
-@media (max-width: 768px) {
-
-    .container-form .info {
-        margin-bottom: 50px;
-        text-align: center;
-    }
-
-}
-
 
 .jumbotron {
     background-image: url(/img/background.jpg);
     background-size: cover;
     background-position: center;
     margin-top: -20px;
-    height: 35vh;
 }
 
 .head {
     color: white;
-    text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
     font-size: 3.5em;
 }
 
@@ -124,15 +123,23 @@ html {
     margin-top: 10px;
 }
 
+.btn-pink {
+    background-color: pink;
+}
+
+.btn-pink:hover {
+    background: rgba(235, 124, 124, 0.527);
+}
+
 .footer {
     padding-top: 20px;
     margin-top: 20px;
     position: absolute;
-    bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
+    bottom: 0;
+    /** Set the fixed height of the footer here */
     height: 60px;
-    background-color: #f5f5f5;
+    background-color: var(--nav);
 }
 
 .showCollapse {
@@ -254,3 +261,60 @@ html {
 
 
 /* * END */
+
+
+
+
+.navbar-brand img {
+    width: 22vw;
+}
+
+@media (min-width: 300px) {
+    .container-form .info {
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    .navbar-brand img {
+        width: 25vw;
+    }
+
+    .head {
+        font-size: 2em;
+        margin-top: 20px;
+    }
+
+    .jumbotron{
+        height: 24vh;
+    }
+}
+
+
+
+@media (min-width: 660px) {
+    .navbar-brand img {
+        max-width: 20vw;
+    }
+
+   .head {
+       font-size: 3em;
+   }
+
+   .jumbotron{
+       height: 30vh;
+   }
+}
+
+@media (min-width: 900px) {
+    .navbar-brand img {
+        max-width: 13vw;
+    }
+.head{
+    font-size: 3.5em;
+}
+
+.jumbotron{
+    height: 33vh;
+}
+
+}
