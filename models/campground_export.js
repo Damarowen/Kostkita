@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
-
+//** sanitize with dom purify and markdown html with JSDOM */
+const marked = require('marked')
+const createDomPurify = require('dompurify');
+const {
+    JSDOM
+} = require('jsdom');
+const dompurify = createDomPurify(new JSDOM().window)
 
 const campgroundSchema = new mongoose.Schema({
 
@@ -20,6 +26,10 @@ const campgroundSchema = new mongoose.Schema({
     description: {
         type: String,
         required: [true, 'Please add a description']
+    },
+    sanitizedHtml: {
+        type: String,
+        required: true
     },
     location:  {
         type: String,
@@ -66,6 +76,16 @@ const campgroundSchema = new mongoose.Schema({
 })
 
 
+//** sanitize and marked */
+campgroundSchema.pre('validate', function (next) {
+
+    if (this.description) {
+        this.sanitizedHtml = dompurify.sanitize(marked(this.description))
+    }
+
+
+    next()
+})
 
 
 

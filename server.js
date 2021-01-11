@@ -20,6 +20,8 @@ const campgroundRoutes = require("./routes/campground")
 const reviewRoutes = require("./routes/reviews")
 const commentRoutes = require("./routes/comment")
 const indexRoutes = require("./routes/auth")
+const userProfileRoutes = require("./routes/user_profile")
+
 const connectDB = require('./config/db')
 
 
@@ -78,11 +80,16 @@ app.use(flash());
 //END//
 
 //ROUTERS
-app.use("/", indexRoutes); //parameter pertama akan menimpa url
+app.use("/", indexRoutes, userProfileRoutes); //parameter pertama akan menimpa url
 app.use("/campground", campgroundRoutes);
 app.use("/campground/:id/comment", commentRoutes);
 app.use("/campground/:id/reviews", reviewRoutes);
 
+
+// ** 404 not found page
+app.all('*', (req, res, next) => {
+    res.status('404').send('404 Not Found')
+})
 
 ///server
 

@@ -37,7 +37,7 @@
 
         <div class="form-group">
             <label for="price">Price</label>
-            <input class="form-control" type="number" min="1" step="1" name="price" value="<%= edit_ejs.price %>" required>
+            <input class="form-control" type="text" name="price" pattern="^\d{1,3}(,\d{3})*(\.\d+)?$"  value="<%= edit_ejs.price %>" data-type="currency" placeholder="1,000,000.00" required>
         </div>
 
    
@@ -61,8 +61,7 @@
 
         <div class="form-group">
             <label for="Description<">Description</label>
-
-            <input class="form-control" type="text" name="description" value="<%= edit_ejs.description %>" required>
+            <textarea class="form-control" name="description" placeholder="description" required rows="10" ><%= edit_ejs.description %></textarea>
         </div>
 
         <button class="btn btn-lg btn-pink btn-block">Submit</button>
@@ -71,9 +70,6 @@
 </div>
 
 
-<!-- *file-upload-with-preview -->
-<script src="https://unpkg.com/file-upload-with-preview@4.0.2/dist/file-upload-with-preview.min.js"></script>
-<script src="/js/fileupload.js"></script>
 
 
 <%- include ('../partials/footer')  %>

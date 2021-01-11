@@ -250,8 +250,7 @@ middlewareObj.ValidateImage = function (req, res, next) {
     Campground_Model.findById(req.params.id, (err, found) => {
         const max = 3;
         if (found.image.length == max) {
-            req.flash("error", "Error ! max 3 image ");
-            return res.redirect("back");
+            uploads(0)
         } else if (found.image.length == 2) {
             uploads(1)
         } else if (found.image.length == 1) {

@@ -47,7 +47,7 @@ html {
 
 .tableId {
     text-align: center;
-    margin: 1rem;
+    margin: 20px 0;
     width: 100%;
     position: relative;
     border-collapse: separate;
@@ -55,14 +55,12 @@ html {
 
 .container-form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     align-items: center;
     margin: 20vh auto;
 }
 
 .review-form {
     margin: 20px auto;
-    width: 50%;
 }
 
 .btn-collapse {
@@ -86,6 +84,8 @@ html {
 }
 
 
+
+
 .height {
     height: 15em;
 }
@@ -95,9 +95,8 @@ html {
     margin-bottom: 10px;
 }
 
-.form {
-    width: 30%;
-    margin: 25px auto;
+form {
+    margin-top: 10px;
 }
 
 
@@ -145,6 +144,7 @@ html {
 .showCollapse {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 2em;
 }
 
 .showCollapseChild {
@@ -219,7 +219,6 @@ html {
 
 .wrapper>.preview>.delete>img {
     height: 30vh;
-    min-width: 10vw;
     max-width: 50vw;
     border-radius: 5px;
 }
@@ -246,9 +245,8 @@ html {
 }
 
 .carousel-item>img {
-    min-width: 20vw;
-    min-height: 35vh;
-    max-height: 70vh;
+    max-width: 100%;
+    height: auto;
 }
 
 
@@ -269,9 +267,11 @@ html {
     width: 22vw;
 }
 
+
+
 @media (min-width: 300px) {
-    .container-form .info {
-        margin-bottom: 50px;
+    #info {
+        padding-bottom: 20px;
         text-align: center;
     }
 
@@ -284,9 +284,7 @@ html {
         margin-top: 20px;
     }
 
-    .jumbotron{
-        height: 24vh;
-    }
+
 }
 
 
@@ -296,25 +294,35 @@ html {
         max-width: 20vw;
     }
 
-   .head {
-       font-size: 3em;
-   }
+    .head {
+        font-size: 3em;
+    }
 
-   .jumbotron{
-       height: 30vh;
-   }
+
 }
 
 @media (min-width: 900px) {
     .navbar-brand img {
         max-width: 13vw;
     }
-.head{
-    font-size: 3.5em;
-}
 
-.jumbotron{
-    height: 33vh;
-}
+    .head {
+        font-size: 3.5em;
+    }
+
+
+    .container-form {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    #info {
+
+        margin-right: 4em;
+        text-align: center;
+    }
+
+    .review-form {
+        width: 50%;
+    }
 
 }

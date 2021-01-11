@@ -5,7 +5,7 @@
 
 <div class="container container-form">
     <div id="info">
-        <h1>Create a New Campground</h1>
+        <h1>Create a New Kost</h1>
     </div>
 
     <form action="/campground" method="POST" novalidate class="validated-form"  enctype="multipart/form-data">
@@ -14,7 +14,7 @@
             <input class="form-control" type="text" name="camp[name]" placeholder="name" required>
         </div>
         <div class="form-group">
-            <input class="form-control" type="number" min="50" step="1" name="camp[price]" placeholder="harga" required>
+            <input class="form-control" type="text" name="camp[price]" pattern="^\d{1,3}(,\d{3})*(\.\d+)?$"  data-type="currency" placeholder="1,000,000.00" required>
         </div>
         <!-- collapse button -->
       
@@ -29,6 +29,8 @@
             aria-expanded="false" aria-controls="collapseExample">
             Upload Your Image
         </button>
+
+ 
 
         <div class="collapse" id="collapseUpload">
             <!-- syntax from upload with preview npm -->
@@ -51,7 +53,7 @@
             <input class="form-control" type="text" name="camp[location]" id="location" placeholder="Yosemite National Park, CA" required>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" name="camp[description]" placeholder="description" required>
+            <textarea name="camp[description]" class="form-control" placeholder="description" required rows="10"></textarea>
         </div>
         <div class="form-group">
             <button class="btn btn-lg btn-pink btn-block">Submit!</button>
@@ -60,7 +62,6 @@
     </form>
 
 </div>
-
 
 
 

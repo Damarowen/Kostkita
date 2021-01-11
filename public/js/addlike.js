@@ -1,4 +1,7 @@
 function changeState() {
+// const x = Number(document.querySelector('.likes').innerText)
+// const sum = x + 1
+// x.innerText = sum
 
     //**use this to parse camp id in url address bar */
     const pathname = window.location.pathname; //campground/14124124
@@ -11,7 +14,7 @@ function changeState() {
     // btnLike True
     if (btnLike) {
 
-        btnLike.setAttribute('class', 'btn btn-sm btn-pink')
+        btnLike.setAttribute('class', 'btn btn-sm btn-success')
         // redefine inside button tag
         btnLike.innerHTML = "<span><i id=fas class=fas ></i></span> You Like This Post"
         // chang id to button unlike for next click

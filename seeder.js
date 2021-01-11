@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const User = require('./models/user');
+const Kost = require('./models/campground_export');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv')
 
@@ -29,6 +30,10 @@ const user = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
 );
 
+const kost = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/kost.json`, 'utf-8')
+);
+
 
 
 
@@ -37,6 +42,8 @@ const user = JSON.parse(
    try {
      
      await User.create(user);
+     await Kost.create(kost);
+
 
      console.log('Data Imported...');
      process.exit();
@@ -49,6 +56,8 @@ const user = JSON.parse(
  const deleteData = async () => {
    try {
      await User.deleteMany();
+     await Kost.deleteMany();
+
 
      console.log('Data Destroyed...');
      process.exit();
@@ -59,9 +68,9 @@ const user = JSON.parse(
  
 
  // call function default node proccess
- if (process.argv[2] === 'install') {
+ if (process.argv[2] === 'i') {
    importData();
- } else if (process.argv[2] === 'delete') {
+ } else if (process.argv[2] === 'd') {
    deleteData();
  }
  

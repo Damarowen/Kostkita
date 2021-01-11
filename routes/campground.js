@@ -138,7 +138,11 @@ router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
 //** @access  Private
 router.put("/:id", Middleware.ValidateImage, async function (req, res) {
 try{
-    const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body);
+ 
+    const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    })
     const imgs = req.files.map(f => ({
         url: f.path,
         filename: f.filename
@@ -155,9 +159,10 @@ try{
     res.redirect(`/campground/${campground._id}`)
 }
     catch(err){
-        //* display error from mongoose validation
-        const message = Object.values(err.errors).map(val => val);
-        req.flash("error", `${message}`);
+        // //* display error from mongoose validation
+        // const message = Object.values(err.errors).map(val => val);
+        console.log(err)
+        req.flash("error", `err`);
         res.redirect(`back`)
     }
 })

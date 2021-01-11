@@ -21,6 +21,12 @@
         <div class="col-md-9" >
             <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
+                    <% if(show_camp.image.length == 0) { %>
+                        <div class="carousel-item active text-center">
+                            <img src="/img/default.png" class="responsive-img" alt="">
+                        </div>
+                    <% } else { %>
+
                     <% show_camp.image.forEach((img, i) => {  %>
                     <div class="carousel-item <%= i === 0 ? 'active' : ''%> text-center">
                         <img src="<%= img.url%>" class="responsive-img" alt="">
@@ -37,7 +43,7 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
-                <% } %>
+                <% } } %>
             </div>
             <div class="img-thumbnail">
                 <div class="caption">
@@ -49,7 +55,7 @@
                     <div>
                         <button type="button" class="btn btn-sm btn-pink" data-toggle="modal"
                             data-target="#campgroundLikes">
-                            <span>Total likes: <i class="fas fa-thumbs-up"></i> <%= show_camp.likes.length %></span>
+                            <span>Total likes: <i class="fas fa-thumbs-up"></i> <span class="likes"><%= show_camp.likes.length %></span></span>
                         </button>
                         <!-- if user not login , display none -->
                         <% if(currentUser) { %>
@@ -93,9 +99,10 @@
                     <% } %>
 
                     <!-- Description -->
-                    <div style="text-align: justify;">
-                        <p><%= show_camp.description %> </p>
+                    <div>
+                        <%- show_camp.sanitizedHtml %>
                     </div>
+
 
                     <!-- edit and delete campground -->
                     <div style="padding: 10px;">
@@ -108,10 +115,6 @@
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
                         </form>
                         <% } %>
-                    </div>
-
-                    <div style="margin-top: 10px;">
-                        <a class="btn btn-default" href="/campground"><i class="fa fa-arrow-left"></i> Go back</a>
                     </div>
 
                 </div>
@@ -140,7 +143,7 @@
                     <% if(currentUser) { %>
                     <div class="showCollapseChild">
                         <a class="btn btn-success" href="/campground/<%= show_camp._id %>/reviews/new">
-                            <span><i class="fa fa-plus"></i></span> Add new Review</a>
+                        Add new Review</a>
                     </div>
                     <% } %>
 
@@ -202,21 +205,21 @@
 
 
 
-            <!-- NEW COMMENT SECTION -->
+            <!--* NEW COMMENT SECTION -->
             <div class="card card-body bg-light">
                 <!--Setting up the add new comment button that is used for collapsing-->
                 <div class="showCollapse">
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseShowComment"
                             aria-expanded="false" aria-controls="collapseComment">
-                            <span><i class="fa fa-comment-o"></i></span> Show Comment</a>
+                            <span><i class="fas fa-comment"></i></span> Show Comment</a>
                     </div>
                     <!-- if no user sign in -->
                     <% if (!currentUser) { %>
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseCreateComment"
                             aria-expanded="false" aria-controls="collapseComment">
-                            <span><i class="fa fa-comment-o"></i></span> Add New Comment</a>
+                            Add New Comment</a>
                     </div>
                     <% console.log("User Not Login Yet") %>
 
@@ -226,7 +229,7 @@
 
                     <div class="showCollapseChild">
                         <a class="btn btn-success" href="/campground/<%= show_camp._id %>/comment/new">
-                            <span><i class="fa fa-plus"></i></span> Add new comment</a>
+                             Add new comment</a>
                     </div>
                     <% console.log("User Already Make Comment : " + show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
                     <% } %>
@@ -236,7 +239,7 @@
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseCreateComment"
                             aria-expanded="false" aria-controls="collapseComment">
-                            <span><i class="fa fa-comment-o"></i></span> Add New Comment</a>
+                             Add New Comment</a>
                     </div>
                     <% console.log("User Not Make Any Comment : " + show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
 
@@ -354,7 +357,9 @@
 
         </div>
 
-
+        <div style="margin-top: 10px;">
+            <a class="btn btn-default" href="/campground"><i class="fa fa-arrow-left"></i> Go back</a>
+        </div>
     </div>
 </div>
 
