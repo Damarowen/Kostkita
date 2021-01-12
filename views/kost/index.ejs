@@ -11,46 +11,62 @@
 		<p class="lead text-center">
 			<a class="btn btn-pink btn-lg" href="/kost/new" role="button">Entry New Kost</a>
 		</p>
-	<% } %> 
+		<% } %>
 	</div>
+</div>
+
+<div class="container text-center">
+	<form action="/kost" method="GET" class="forn-inline">
+		<label class="form-label" for="form1">Search</label>
+		<input type="search" name="cari" id="form1" class="form-control cari" />
+		<button type="submit" class="btn btn-pink">
+			<i class="fas fa-search"></i>
+		</button>
+	</form>
+
 </div>
 
 <div class="container">
 	<div class="row text-center">
+		<% if(data.length == 0) { %>
+		<div class="col-lg">
+			<p>Sorry no data found</p>
+		</div>
+		<% } else { %>
 		<% data.forEach(function(kost) { %>
 		<div class="col-lg-4">
 			<div class="card">
 				<!-- ** if user not upload photo, photo using img default -->
-				<% if(kost.image == 0){%> 
-					<img class="card-img-top" src="/img/default.png" alt="Card image cap">
-					<% } else if(kost.image.length > 0) { %>
-						<img class="card-img-top" src="<%= kost.image[0].url %>" alt="Card image cap">
-					<% } %>
+				<% if(kost.image == 0){%>
+				<img class="card-img-top" src="/img/default.png" alt="Card image cap">
+				<% } else if(kost.image.length > 0) { %>
+				<img class="card-img-top" src="<%= kost.image[0].url %>" alt="Card image cap">
+				<% } %>
 				<div class="card-body">
 					<h5 class="card-title"><strong><%= kost.name %></strong></h5>
 					<div>
-						<span > <i class="fa fa-thumbs-up"> </i> <%= kost.likes.length %> </span>
+						<span> <i class="fa fa-thumbs-up"> </i> <%= kost.likes.length %> </span>
 					</div>
 					<% if (kost.rating === 0) { %>
-						<em>No reviews yet.</em>
-						<% } else { %>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star <% if (kost.rating > 1.5) { %> checked <% } %>"></span>
-						<span class="fa fa-star <% if (kost.rating > 2.5) { %> checked <% } %>"></span>
-						<span class="fa fa-star <% if (kost.rating > 3.5) { %> checked <% } %>"></span>
-						<span class="fa fa-star <% if (kost.rating > 4.5) { %> checked <% } %>"></span>
-						<% } %>
-						<br>
-						<br>
+					<em>No reviews yet.</em>
+					<% } else { %>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star <% if (kost.rating > 1.5) { %> checked <% } %>"></span>
+					<span class="fa fa-star <% if (kost.rating > 2.5) { %> checked <% } %>"></span>
+					<span class="fa fa-star <% if (kost.rating > 3.5) { %> checked <% } %>"></span>
+					<span class="fa fa-star <% if (kost.rating > 4.5) { %> checked <% } %>"></span>
+					<% } %>
+					<br>
+					<br>
 					<a href="/kost/<%= kost._id %>" class="btn btn-pink">Description</a>
 				</div>
 			</div>
 		</div>
 		<% }) %>
+		<% }%>
+
 	</div>
 </div>
 
 
 <%- include ('../partials/footer')  %>
-
-

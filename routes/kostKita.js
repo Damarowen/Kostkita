@@ -20,14 +20,33 @@ const geocoder = mbxGeocoding({
 //** @access  Public
 
 router.get("/", async function (req, res) {
+    try {
+        if (req.query.cari) {
+            const query = new RegExp(escapeRegex(req.query.cari), 'gi');
+            const data = await Kost.find({$or: [{name: query,}, {location: query}, {"author.username":query}]})
+console.log(data)
+            res.render("kost/index", {
+                data
+            });
 
-    const data = await Kost.find({}).sort({
-        createdAt: -1
-    })
+        } else {
+            const data = await Kost.find({}).sort({
+                createdAt: -1
+            })
 
-    res.render("kost/index", {
-        data
-    })
+            res.render("kost/index", {
+                data
+            })
+
+        }
+
+    } catch (err) {
+        console.log(err)
+        req.flash("error", "error");
+        res.redirect(`back`)
+    }
+
+
 })
 
 
@@ -69,6 +88,8 @@ router.post("/", Middleware.uploads, async function (req, res) {
             .catch(error => console.log(error.message));
     } catch (err) {
         console.log(err)
+        req.flash("error", "error");
+        res.redirect(`back`)
     }
 
 
@@ -283,5 +304,10 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
     }
 
 });
+
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

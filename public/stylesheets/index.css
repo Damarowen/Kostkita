@@ -130,6 +130,11 @@ form {
     background: rgba(235, 124, 124, 0.527);
 }
 
+.cari {
+    display: inline;
+    width: 50%;
+}
+
 .footer {
     padding-top: 20px;
     margin-top: 20px;
