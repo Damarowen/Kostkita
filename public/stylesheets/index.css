@@ -134,6 +134,7 @@ form {
     padding-top: 20px;
     margin-top: 20px;
     position: absolute;
+    left: 0;
     width: 100%;
     bottom: 0;
     /** Set the fixed height of the footer here */
@@ -270,7 +271,7 @@ form {
 
 
 @media (min-width: 300px) {
-    #info {
+    .info {
         padding-bottom: 20px;
         text-align: center;
     }
@@ -315,9 +316,8 @@ form {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 
-    #info {
-
-        margin-right: 4em;
+    .info {
+        margin-left: -7em;
         text-align: center;
     }
 

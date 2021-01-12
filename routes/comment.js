@@ -3,7 +3,7 @@ const express = require("express"),
 		mergeParams: true
 	}),
 	Kost = require("../models/Kost"),
-	Comment = require("../models/Kost"),
+	Comment = require("../models/Comment"),
 	Middleware = require("../middleware/index")
 
 
@@ -24,28 +24,30 @@ router.get("/new", Middleware.checkCommentExistence, (req, res) => {
 })
 
 //*add new comment
-router.post("/", Middleware.checkCommentExistence, (req, res) => {
+router.post("/", Middleware.checkCommentExistence, async function (req, res) {
 
-	Kost.findById(req.params.id, (err, data) => {
-		if (err) {
-			console.log(err)
-			res.redirect("/kost")
-		} else {
-			let body_comment = req.body.comment
-			let new_comment = new Comment(body_comment)
-			//define id and author
-			new_comment.author.id = req.user._id
-			new_comment.author.username = req.user.username
-			//save comment
-			new_comment.save()
-			console.log(new_comment)
-			data.comment.push(new_comment)
-			data.save()
-				.then(() => req.flash("success", "New Comment Added To " + data.name))
-				.then(() => res.redirect('/kost/' + data._id))
-		}
+	try {
+		const kost = await Kost.findById(req.params.id)
 
-	})
+		let new_comment = new Comment(req.body.comment)
+		//define id and author
+		new_comment.author.id = req.user._id
+		new_comment.author.username = req.user.username
+		new_comment.kost = kost
+		//save comment
+		new_comment.save()
+		console.log(req.body.comment)
+		kost.comment.push(new_comment)
+		kost.save()
+		.then(() => req.flash("success", "New Comment Added To " + kost.name))
+	    .then(() => res.redirect('/kost/' + kost._id))
+
+	} catch (err) {
+		console.log(err)
+		req.flash("error", "something error")
+		res.redirect('/kost/' + kost._id)
+	}
+
 
 })
 
@@ -90,32 +92,31 @@ router.put("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
 
 //*DELETE COMMENT
 ///*kost/:id/comment/comment_id/
-router.delete("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
+router.delete("/:comment_id", Middleware.checkCommentOwner, async function (req, res) {
 
 	const id_kost = req.params.id
 	const id_comment = req.params.comment_id
 
 
+//* delete comment
+	await Comment.findByIdAndDelete(id_comment)
+		.then(() => console.log("this is comment id" + id_comment))
+		.then(() => console.log("this is id kost" + id_kost))
+		.then(() => req.flash("success", "Comment Succeed Delete"))
+		.then(() => res.redirect(`/kost/" + ${id_kost}`))
+		.catch(error => console.log(error.message))
+
+
 	//*delete review in kost first
-	Kost.findByIdAndUpdate(id_kost, {
+	await Kost.findByIdAndUpdate(id_kost, {
 		$pull: {
 			comment: id_comment
 		}
 	}, {
 		new: true
-	}).exec(function (err, kost) {
-		if (err) {
-			req.flash("error", err.message);
-			return res.redirect("back");
-		}
 	})
 
-
-	//* delete comment
-	Comment.findByIdAndRemove(id_comment)
-		.then(() => req.flash("success", "Comment Succeed Delete"))
-		.then(() => res.redirect(`/kost/" + ${id_kost}`))
-		.catch(error => console.log(error.message))
+	
 
 
 

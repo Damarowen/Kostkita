@@ -2,8 +2,10 @@
 
 
 const fs = require('fs');
-const User = require('./models/user');
-const Kost = require('./models/kost');
+const User = require('./models/User');
+const Kost = require('./models/Kost');
+const Review = require('./models/Review');
+const Comment = require('./models/Comment');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv')
 
@@ -57,6 +59,8 @@ const kost = JSON.parse(
    try {
      await User.deleteMany();
      await Kost.deleteMany();
+     await Review.deleteMany();
+     await Comment.deleteMany();
 
 
      console.log('Data Destroyed...');

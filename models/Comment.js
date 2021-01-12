@@ -12,6 +12,11 @@ const commentSchema = mongoose.Schema({
             ref: "User"
         },
         username: String
+    },
+    //* kost associated with the review
+    kost: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Kost"
     }
 }, {
     //* if timestamps are set to true, mongoose assigns createdAt and updatedAt fields to your schema, the type assigned is Date.

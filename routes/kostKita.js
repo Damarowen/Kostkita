@@ -19,16 +19,14 @@ const geocoder = mbxGeocoding({
 //** @route  /KOST
 //** @access  Public
 
-router.get("/", function (req, res) {
+router.get("/", async function (req, res) {
 
-    Kost.find({}, function (err, kost) {
-        if (err) {
-            console.log(err)
-        } else {
-            res.render("kost/index", {
-                kost: kost
-            })
-        }
+    const data = await Kost.find({}).sort({
+        createdAt: -1
+    })
+
+    res.render("kost/index", {
+        data
     })
 })
 
@@ -82,17 +80,9 @@ router.post("/", Middleware.uploads, async function (req, res) {
 //**SHOW KOST
 //** @route  /kost/:ID
 //** @access  Public
-router.get("/:id", function (req, res) {
-    try{
-        Kost.findById(req.params.id).populate('likes').
-        populate({
-            path: "comment",
-            options: {
-                sort: {
-                    updatedAt: -1
-                }
-            }
-        }).
+router.get("/:id", async function (req, res) {
+    try {
+        const kost = await Kost.findById(req.params.id).populate('likes').
         populate({
             path: "reviews",
             options: {
@@ -100,22 +90,23 @@ router.get("/:id", function (req, res) {
                     updatedAt: -1
                 }
             }
-        }).exec((err, kost) => { //*populate merujuk ke obj di schema
-            if (err || !kost) { //*handle error jika data tdk ketemu
-                req.flash("error", "Kost not found")
-                res.redirect("back")
-                console.log(err)
-            } else {
-                res.render("kost/show", {
-                    kost: kost
-                })
+        }).
+        populate({
+            path: "comment",
+            options: {
+                sort: {
+                    updatedAt: -1
+                }
             }
         })
-    }
-    catch(err){
+        res.render("kost/show", {
+            kost
+        })
+
+    } catch (err) {
         //* display error from mongoose validation
         console.log(err)
-        req.flash("error", `error`);
+        req.flash("error", "error");
         res.redirect(`back`)
     }
 })
@@ -137,28 +128,27 @@ router.get("/:id/edit", Middleware.checkKostOwner, function (req, res) {
 //** @route  /kost/:ID
 //** @access  Private
 router.put("/:id", Middleware.ValidateImage, async function (req, res) {
-try{
- 
-    const kost = await Kost.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    })
-    const imgs = req.files.map(f => ({
-        url: f.path,
-        filename: f.filename
-    }));
-    const geoData = await geocoder.forwardGeocode({
-        query: req.body.location,
-        limit: 1
-    }).send()
-    kost.geometry = geoData.body.features[0].geometry;
-    kost.image.push(...imgs);
-    await kost.save();
-    console.log("Kost Updated via Cloudinary")
-    req.flash("success", "Successfully Updated!");
-    res.redirect(`/kost/${kost._id}`)
-}
-    catch(err){
+    try {
+
+        const kost = await Kost.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        })
+        const imgs = req.files.map(f => ({
+            url: f.path,
+            filename: f.filename
+        }));
+        const geoData = await geocoder.forwardGeocode({
+            query: req.body.location,
+            limit: 1
+        }).send()
+        kost.geometry = geoData.body.features[0].geometry;
+        kost.image.push(...imgs);
+        await kost.save();
+        console.log("Kost Updated via Cloudinary")
+        req.flash("success", "Successfully Updated!");
+        res.redirect(`/kost/${kost._id}`)
+    } catch (err) {
         // //* display error from mongoose validation
         // const message = Object.values(err.errors).map(val => val);
         console.log(err)
@@ -264,12 +254,12 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
                 console.log(err);
                 return res.redirect("/kost");
             }
-    
+
             //* check if req.user._id exists in kost.likes
             const userAlreadyLike = kost.likes.some(function (like) {
                 return like.equals(req.user._id);
             });
-    
+
             if (userAlreadyLike) {
                 //* user already liked, removing like
                 kost.likes.pull(req.user._id);
@@ -283,15 +273,15 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
                 kost.save()
                 return res.redirect("/kost/" + kost._id);
             }
-    
+
         });
-    } catch(err){
+    } catch (err) {
         console.log(err)
         req.flash("error", err.message);
         return res.redirect("back");
-        
+
     }
-   
+
 });
 
 module.exports = router;
