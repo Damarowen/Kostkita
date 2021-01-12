@@ -3,7 +3,7 @@ var express = require("express"),
 		mergeParams: true
 	}),
 	passport = require("passport"),
-	User = require("../models/user")
+	User = require("../models/User")
 
 
 
@@ -15,8 +15,6 @@ router.get("/", function (req, res) {
 })
 
 
-//----------///
-///AUTHENTICATION ROUTE
 
 // show register form
 router.get("/register", (req, res) => {
@@ -28,11 +26,11 @@ router.get("/register", (req, res) => {
 //handle sign up logic
 router.post("/register", (req, res) => {
 
-	var name = req.body.username
-	var pass = req.body.password
-	var email = req.body.email
-	var avatar = "https://252radio.com/wp-content/uploads/2016/11/default-user-image.png"
-	var newData = new User({
+	const pass = req.body.password
+	const name = req.body.username
+	const email = req.body.email
+	const avatar = "https://252radio.com/wp-content/uploads/2016/11/default-user-image.png"
+	const newData = new User({
 		username: name,
 		email: email,
 		avatar: avatar
@@ -46,23 +44,22 @@ router.post("/register", (req, res) => {
 		} else {
 			req.flash("success", `Welcome Aboard. ${name}`)
 			passport.authenticate("local")(req, res, () => {
-				res.redirect("/campground")
+				res.redirect("/kost")
 				console.log("New User Created")
 			})
 		}
 	})
 })
 
-//show login form
+//*show login form
 router.get("/login", (req, res) => {
 	res.render("login")
 })
 
 
-//handling login logic
+//*handling login logic
 router.post("/login", passport.authenticate("local", { //<<  middleware
 
-	
 	failureRedirect: "/login",
 	failureFlash: 'Invalid username or password.'
 
@@ -71,10 +68,10 @@ router.post("/login", passport.authenticate("local", { //<<  middleware
 		//admin only accesss /adminlogin
 		req.logout()
 		req.flash("error", "User and Password is for ADMIN")
-		res.redirect("/campground")
+		res.redirect("/kost")
 	} else {
-		req.flash("success", `HI  ${req.user.username}   Welcome To The YelpCamp`)
-		res.redirect("/campground")
+		req.flash("success", `HI  ${req.user.username}   Welcome To The KostKita`)
+		res.redirect("/kost")
 
 	}
 
@@ -82,16 +79,16 @@ router.post("/login", passport.authenticate("local", { //<<  middleware
 
 
 
-//for admin
+//*for admin
 router.get("/admin", (req, res) => {
 	res.render("admin-login")
 })
 
 
-//handling login logic
+//*handling login logic
 router.post("/adminlogin", passport.authenticate("local", { //<<  middleware
 
-	// successRedirect: "/campground",
+	// successRedirect: "/kost",
 	// successFlash: "success"
 	failureRedirect: "/login",
 	failureFlash: 'Invalid username or password.'
@@ -99,7 +96,7 @@ router.post("/adminlogin", passport.authenticate("local", { //<<  middleware
 }), (req, res) => {
 
 	req.flash("success", `Your Login as ${req.user.username} Status: ADMIN`)
-	res.redirect("/campground")
+	res.redirect("/kost")
 
 
 });
@@ -109,7 +106,7 @@ router.post("/adminlogin", passport.authenticate("local", { //<<  middleware
 // logout route
 router.get("/logout", (req, res) => {
 	req.logout()
-	res.redirect("/campground")
+	res.redirect("/kost")
 })
 
 

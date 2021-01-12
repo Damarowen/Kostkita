@@ -1,18 +1,18 @@
- <!-- this linked to campground/show -->
+ <!--* this linked to kost/show -->
  
- <!-- Campground Likes Modal POP UP -->
- <div id="campgroundLikes" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="campgroundLikes">
+ <!--* KOST Likes Modal POP UP -->
+ <div id="kostLikes" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="kostLikes">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <!-- Modal content-->
+        <!--* Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Total likes: <%= show_camp.likes.length %></h4>
+                <h4 class="modal-title">Total likes: <%= kost.likes.length %></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- table -->
+                <!--* table -->
                 <table class="table table-striped">
                     <thead>
                         <tr class="table-success">
@@ -20,19 +20,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% show_camp.likes.forEach(function(like) { %>
+                        <% kost.likes.forEach(function(like) { %>
                         <tr>
                             <td><span class="badge"><i class="fa fa-user"></i></span> <%= like.username %></td>
                         </tr>
                         <% }); %>
-                        <% if (show_camp.likes.length === 0) { %>
+                        <% if (kost.likes.length === 0) { %>
                         <tr>
                             <td><em>No likes yet.</em></td>
                         </tr>
                         <% } %>
                     </tbody>
                 </table>
-                <!-- table end -->
+                <!-- *table end -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -41,23 +41,23 @@
     </div>
 </div>
 
-<!-- Campground REVIEWS Modal POP UP -->
-<div id="campgroundReview" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="campgroundReview">
+<!--* KOST REVIEWS Modal POP UP -->
+<div id="kostReview" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="kostReview">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <!-- Modal content-->
+        <!--* Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Review: <%= show_camp.name %></h4>
+                <h4 class="modal-title">Review: <%= kost.name %></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- table -->
+                <!--* table -->
                 <table class="table">
 
                     <tbody>
-                        <% show_camp.reviews.forEach(function(review) { %>
+                        <% kost.reviews.forEach(function(review) { %>
 
                         <tr class="table-success">
                             <td>Review By : <span class="badge"><i class="fa fa-user"></i> <strong>
@@ -80,9 +80,9 @@
                             <td>
                                 <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
                                 <a class="btn btn-sm btn-warning"
-                                    href="/campground/<%=show_camp._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                                    href="/kost/<%=kost._id %>/reviews/<%=review._id %>/edit">Edit</a>
                                 <form id="delete-button"
-                                    action="/campground/<%=show_camp._id %>/reviews/<%=review._id %>?_method=DELETE"
+                                    action="/kost/<%=kost._id %>/reviews/<%=review._id %>?_method=DELETE"
                                     method="POST">
                                     <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                                 </form>
@@ -90,18 +90,18 @@
                             </td>
                         </tr>
                         <% }); %>
-                        <% if (show_camp.reviews.length === 0) { %>
+                        <% if (kost.reviews.length === 0) { %>
                         <tr>
                             <td><em>No Reviews yet.</em></td>
                         </tr>
                         <% } %>
                     </tbody>
                 </table>
-                <!-- table end -->
+                <!--* table end -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="/campground/<%= show_camp._id %>/reviews/new"" class=" btn btn-success"> Add new Review</a>
+                <a href="/kost/<%= kost._id %>/reviews/new"" class=" btn btn-success"> Add new Review</a>
 
             </div>
         </div>

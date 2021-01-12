@@ -1,9 +1,9 @@
-var express = require("express"),
+const express = require("express"),
 	router = express.Router({
 		mergeParams: true
 	}),
-	User = require("../models/user"),
-	Campground = require("../models/campground_export"),
+	User = require("../models/User"),
+	Kost = require("../models/Kost"),
 	Middleware = require("../middleware/index")
 
 
@@ -14,17 +14,19 @@ router.get('/users/:id', Middleware.isLogggedIn, (req, res) => {
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) {
 			req.flash("error", "wrong")
-			return res.redirect("/campground")
+			return res.redirect("/kost")
 		}
-		Campground.find().where('author.id').equals(foundUser.id).exec(function (err, foundCamp) {
+		//* where and equals query
+		Kost.find().where('author.id').equals(foundUser.id).exec(function (err, foundKost) {
 
 			if (err) {
-				req.flash("error", "wrong")
-				return res.redirect("/campground")
+				console.log(err)
+				req.flash("error", "Somthing wrong with Kost Find Route")
+				return res.redirect("/kost")
 			}
 			res.render("users/show-users", {
 				user: foundUser,
-				camp: foundCamp
+				kost: foundKost
 			})
 
 		})
@@ -37,7 +39,7 @@ router.get('/users/:id/edit', Middleware.checkUser, (req, res) => {
 	User.findById(req.params.id, (err, foundUser) => {
 		if (err) {
 			req.flash("error", "wrong")
-			return res.redirect("/campground")
+			return res.redirect("/kost")
 		}
 		res.render("users/edit-users", {
 			user: foundUser

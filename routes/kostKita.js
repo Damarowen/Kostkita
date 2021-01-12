@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const Campground_Model = require("../models/campground_export")
-const Comment = require("../models/comment_export");
-const Review = require("../models/review");
+const Kost = require("../models/Kost")
+const Comment = require("../models/Comment");
+const Review = require("../models/Review");
 const Middleware = require("../middleware/index")
 const {
     cloudinary
@@ -15,18 +15,18 @@ const geocoder = mbxGeocoding({
 
 
 
-//**INDEX ROUTE - DISPLAY ALL CAMPGROUNDS
-//** @route  /campground
+//**INDEX ROUTE - DISPLAY ALL KOST
+//** @route  /KOST
 //** @access  Public
 
 router.get("/", function (req, res) {
 
-    Campground_Model.find({}, function (err, allCampgrounds) {
+    Kost.find({}, function (err, kost) {
         if (err) {
             console.log(err)
         } else {
-            res.render("campground/index", {
-                all_Campgrounds: allCampgrounds
+            res.render("kost/index", {
+                kost: kost
             })
         }
     })
@@ -34,40 +34,40 @@ router.get("/", function (req, res) {
 
 
 
-//**RENDER NEW CAMP
-//** @route  /campground/new
+//**RENDER NEW KOST
+//** @route  /kost/new
 //** @access  Private
 router.get("/new", Middleware.isLogggedIn, function (req, res) {
-    res.render("campground/new")
+    res.render("kost/new")
 })
 
 
 
 
-//**CREATE ROUTE - ADD NEW CAMPGROUND
-//** @route  /campground
+//**CREATE ROUTE - ADD NEW KOST
+//** @route  /kost
 //** @access  Private
 router.post("/", Middleware.uploads, async function (req, res) {
     try {
         const geoData = await geocoder.forwardGeocode({
-            query: req.body.camp.location,
+            query: req.body.kost.location,
             limit: 1
         }).send()
-        const addCamp = new Campground_Model(req.body.camp)
-        addCamp.geometry = geoData.body.features[0].geometry;
-        addCamp.image = await req.files.map(f => ({
+        const addKost = new Kost(req.body.kost)
+        addKost.geometry = geoData.body.features[0].geometry;
+        addKost.image = await req.files.map(f => ({
             url: f.path,
             filename: f.filename
         }));
-        // add author to campground
-        addCamp.author = {
+        // add author to kost
+        addKost.author = {
             id: req.user._id,
             username: req.user.username
         }
-        console.log(addCamp)
-        await addCamp.save()
-            .then(() => req.flash("success", "Succesfully Added New Camp"))
-            .then(() => res.redirect('/campground'))
+        console.log(addKost)
+        await addKost.save()
+            .then(() => req.flash("success", "Succesfully Added New Kost"))
+            .then(() => res.redirect('/kost'))
             .catch(error => console.log(error.message));
     } catch (err) {
         console.log(err)
@@ -79,12 +79,12 @@ router.post("/", Middleware.uploads, async function (req, res) {
 
 
 
-//**SHOW CAMP
-//** @route  /campground/:ID
+//**SHOW KOST
+//** @route  /kost/:ID
 //** @access  Public
 router.get("/:id", function (req, res) {
     try{
-        Campground_Model.findById(req.params.id).populate('likes').
+        Kost.findById(req.params.id).populate('likes').
         populate({
             path: "comment",
             options: {
@@ -100,14 +100,14 @@ router.get("/:id", function (req, res) {
                     updatedAt: -1
                 }
             }
-        }).exec((err, foundCamp) => { //*populate merujuk ke obj di schema
-            if (err || !foundCamp) { //*handle error jika data tdk ketemu
-                req.flash("error", "Campground Not Found CAMGROUND")
+        }).exec((err, kost) => { //*populate merujuk ke obj di schema
+            if (err || !kost) { //*handle error jika data tdk ketemu
+                req.flash("error", "Kost not found")
                 res.redirect("back")
                 console.log(err)
             } else {
-                res.render("campground/show", {
-                    show_camp: foundCamp
+                res.render("kost/show", {
+                    kost: kost
                 })
             }
         })
@@ -120,12 +120,12 @@ router.get("/:id", function (req, res) {
     }
 })
 
-//**RENDER EDIT CAMP
-//** @route  /campground/:ID/edit
+//**RENDER EDIT kost
+//** @route  /kost/:ID/edit
 //** @access  Private
-router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
-    Campground_Model.findById(req.params.id, (err, found) => {
-        res.render("campground/edit", {
+router.get("/:id/edit", Middleware.checkKostOwner, function (req, res) {
+    Kost.findById(req.params.id, (err, found) => {
+        res.render("kost/edit", {
             edit_ejs: found
         })
     });
@@ -133,13 +133,13 @@ router.get("/:id/edit", Middleware.checkCampOwner, function (req, res) {
 
 
 
-//**UPDATE CAMP
-//** @route  /campground/:ID
+//**UPDATE KOST
+//** @route  /kost/:ID
 //** @access  Private
 router.put("/:id", Middleware.ValidateImage, async function (req, res) {
 try{
  
-    const campground = await Campground_Model.findByIdAndUpdate(req.params.id, req.body, {
+    const kost = await Kost.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
     })
@@ -151,12 +151,12 @@ try{
         query: req.body.location,
         limit: 1
     }).send()
-    campground.geometry = geoData.body.features[0].geometry;
-    campground.image.push(...imgs);
-    await campground.save();
-    console.log("Campground Updated via Cloudinary")
+    kost.geometry = geoData.body.features[0].geometry;
+    kost.image.push(...imgs);
+    await kost.save();
+    console.log("Kost Updated via Cloudinary")
     req.flash("success", "Successfully Updated!");
-    res.redirect(`/campground/${campground._id}`)
+    res.redirect(`/kost/${kost._id}`)
 }
     catch(err){
         // //* display error from mongoose validation
@@ -168,51 +168,51 @@ try{
 })
 
 
-//**DELETE CAMP
-//** @route  /campground/:ID
+//**DELETE KOST
+//** @route  /kost/:ID
 //** @access  Private
-router.delete("/:id", Middleware.checkCampOwner, function (req, res) {
+router.delete("/:id", Middleware.checkKostOwner, function (req, res) {
 
-    Campground_Model.findById(req.params.id, async function (err, deleteCamp) {
+    Kost.findById(req.params.id, async function (err, kost) {
 
         try {
 
-            //* deletes all comments associated with the campground
+            //* deletes all comments associated with the kost
             Comment.deleteOne({
                 "_id": {
-                    $in: deleteCamp.comment
+                    $in: kost.comment
                 }
             }, function (err) {
                 if (err) {
                     console.log(err);
-                    return res.redirect("/campground");
+                    return res.redirect("/kost");
                 }
-                console.log("Comment Deleted from Campground");
+                console.log("Comment Deleted from Kost");
             })
 
-            //* deletes all reviews associated with the campground
+            //* deletes all reviews associated with the kost
             Review.deleteOne({
                 "_id": {
-                    $in: deleteCamp.reviews
+                    $in: kost.reviews
                 }
             }, function (err) {
                 if (err) {
                     console.log(err);
-                    return res.redirect("/campgrounds");
+                    return res.redirect("/kost");
                 }
-                console.log("Review Deleted from Campground");
+                console.log("Review Deleted from Kost");
 
             })
             //*  delete image
-            for (const x of deleteCamp.image) {
+            for (const x of kost.image) {
                 console.log(x)
                 await cloudinary.uploader.destroy(x.filename)
             }
 
-            //*  delete the campground
-            await deleteCamp.remove();
-            req.flash("success", "Campground deleted successfully!");
-            res.redirect("/campground");
+            //*  delete kost
+            await kost.remove();
+            req.flash("success", "Kost deleted successfully!");
+            res.redirect("/kost");
 
         } catch (err) {
             console.log(err)
@@ -225,16 +225,16 @@ router.delete("/:id", Middleware.checkCampOwner, function (req, res) {
 
 
 //**DELETE PHOTO CLIENT SIDE
-//** @route  /campground/:ID/:cloudinaryFolder/:imageId
+//** @route  /kost/:ID/:cloudinaryFolder/:imageId
 //** @access  Private
 
 router.post("/:id/KostKita/:imageid", async function (req, res) {
     try {
-        const camp = await Campground_Model.findById(req.params.id)
+        const kost = await Kost.findById(req.params.id)
         const file = `KostKita/${req.params.imageid}`
 
         //*destroy in local
-        await camp.updateOne({
+        await kost.updateOne({
             $pull: {
                 image: {
                     filename: file
@@ -254,34 +254,34 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
 
 
 //**LIKE BUTTON
-//** @route  /campground/:ID/Like
+//** @route  /kost/:ID/Like
 //** @access  Private
 
 router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
     try {
-        Campground_Model.findById(req.params.id, function (err, foundCampground) {
+        Kost.findById(req.params.id, function (err, kost) {
             if (err) {
                 console.log(err);
-                return res.redirect("/campground");
+                return res.redirect("/kost");
             }
     
-            //* check if req.user._id exists in foundCampground.likes
-            const userAlreadyLike = foundCampground.likes.some(function (like) {
+            //* check if req.user._id exists in kost.likes
+            const userAlreadyLike = kost.likes.some(function (like) {
                 return like.equals(req.user._id);
             });
     
             if (userAlreadyLike) {
                 //* user already liked, removing like
-                foundCampground.likes.pull(req.user._id);
-                console.log(`total likes ${foundCampground.likes.length}`)
-                foundCampground.save()
-                return res.redirect("/campground/" + foundCampground._id);
+                kost.likes.pull(req.user._id);
+                console.log(`total likes ${kost.likes.length}`)
+                kost.save()
+                return res.redirect("/kost/" + kost._id);
             } else {
                 //* adding the new user like
-                foundCampground.likes.push(req.user);
-                console.log(`total likes ${foundCampground.likes.length}`)
-                foundCampground.save()
-                return res.redirect("/campground/" + foundCampground._id);
+                kost.likes.push(req.user);
+                console.log(`total likes ${kost.likes.length}`)
+                kost.save()
+                return res.redirect("/kost/" + kost._id);
             }
     
         });

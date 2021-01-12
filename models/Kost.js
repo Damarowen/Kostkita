@@ -8,7 +8,7 @@ const {
 } = require('jsdom');
 const dompurify = createDomPurify(new JSDOM().window)
 
-const campgroundSchema = new mongoose.Schema({
+const kostSchema = new mongoose.Schema({
 
     name: {
         type: String,
@@ -77,7 +77,7 @@ const campgroundSchema = new mongoose.Schema({
 
 
 //** sanitize and marked */
-campgroundSchema.pre('validate', function (next) {
+kostSchema.pre('validate', function (next) {
 
     if (this.description) {
         this.sanitizedHtml = dompurify.sanitize(marked(this.description))
@@ -90,4 +90,4 @@ campgroundSchema.pre('validate', function (next) {
 
 
 
-module.exports = mongoose.model("Campground", campgroundSchema, "Campground")
+module.exports = mongoose.model("Kost", kostSchema, "Kost")

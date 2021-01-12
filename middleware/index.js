@@ -1,7 +1,7 @@
-const Review = require("../models/review");
-const Campground_Model = require("../models/campground_export")
-const Comment = require("../models/comment_export")
-const User = require("../models/user")
+const Review = require("../models/Review");
+const Kost = require("../models/Kost")
+const Comment = require("../models/Comment")
+const User = require("../models/User")
 
 
 
@@ -20,20 +20,20 @@ middlewareObj.isLogggedIn = (req, res, next) => {
     }
 }
 
-//*CAMP MIDDLEWARE
+//*KOST MIDDLEWARE
 
-middlewareObj.checkCampOwner = (req, res, next) => {
+middlewareObj.checkKostOwner = (req, res, next) => {
 
     const id_data = req.params.id
     if (req.isAuthenticated()) {
-        Campground_Model.findById(id_data, function (err, data) {
+        Kost.findById(id_data, function (err, data) {
          
             if (err || !data) { //handle error jika data tdk ketemu
-                req.flash("error", "Campground Not Found")
+                req.flash("error", "Kost Not Found")
                 res.redirect("back")
                 console.log(!data)
             } else {
-                //does user own the camp
+                //does user own the KOST
                 if (data.author.id.equals(req.user._id) || req.user.isAdmin) {
                     console.log(` isAdmin : ${req.user.isAdmin}`)
                     next()
@@ -53,19 +53,19 @@ middlewareObj.checkCampOwner = (req, res, next) => {
 
 middlewareObj.checkCommentExistence = function (req, res, next) {
     if (req.isAuthenticated()) {
-        Campground_Model.findById(req.params.id).populate("comment").exec(function (err, foundCampground) {
-            if (err || !foundCampground) {
-                req.flash("error", "Campground not found.");
+        Kost.findById(req.params.id).populate("comment").exec(function (err, kost) {
+            if (err || !kost) {
+                req.flash("error", "Kost not found.");
                 res.redirect("back");
             } else {
-                // check if req.user._id exists in foundCampground.reviews
-                const foundUserComment = foundCampground.comment.some(function (comment) {
+                // check if req.user._id exists in Kost.reviews
+                const foundUserComment = kost.comment.some(function (comment) {
                     return comment.author.id.equals(req.user._id);
                 });
                 console.log("hasil dari pencairan " + foundUserComment)
                 if (foundUserComment) {
                     req.flash("error", "You already wrote a Comment.");
-                    return res.redirect("/campground/" + foundCampground._id);
+                    return res.redirect(`/kost/${kost._id}`);
                 }
                 // if the review was not found, go to the next middleware
                 next();
@@ -85,12 +85,12 @@ middlewareObj.checkCommentOwner = (req, res, next) => {
 
         Comment.findById(id_comment, (err, data) => {
 
-            if (err || !data) { //handle error jika data tdk ketemu
+            if (err || !data) { //*handle error jika data tdk ketemu
                 req.flash("error", "Comment Not Found")
                 res.redirect("back")
                 console.log(!data)
             } else {
-                //does user own the comment
+                //*does user own the comment
                 if (data.author.id.equals(req.user._id) || req.user.isAdmin) {
                     next()
                 } else {
@@ -100,7 +100,7 @@ middlewareObj.checkCommentOwner = (req, res, next) => {
         })
     } else {
         req.flash("error", "Please Login First")
-        res.redirect("back") //if ini untuk user belum login
+        res.redirect("back") //*if ini untuk user belum login
     }
 
 }
@@ -132,18 +132,18 @@ middlewareObj.checkReviewOwnership = function (req, res, next) {
 
 middlewareObj.checkReviewExistence = function (req, res, next) {
     if (req.isAuthenticated()) {
-        Campground_Model.findById(req.params.id).populate("reviews").exec(function (err, foundCampground) {
-            if (err || !foundCampground) {
-                req.flash("error", "Campground not found.");
+        Kost.findById(req.params.id).populate("reviews").exec(function (err, kost) {
+            if (err || !kost) {
+                req.flash("error", "Kost not found.");
                 res.redirect("back");
             } else {
-                // check if req.user._id exists in foundCampground.reviews
-                const foundUserReview = foundCampground.reviews.some(function (review) {
+                //* check if req.user._id exists in kost.reviews
+                const foundUserReview = kost.reviews.some(function (review) {
                     return review.author.id.equals(req.user._id);
                 });
                 if (foundUserReview) {
                     req.flash("error", "You already wrote a review.");
-                    return res.redirect("/campground/" + foundCampground._id);
+                    return res.redirect(`/kost/${kost._id}`);
                 }
                 // if the review was not found, go to the next middleware
                 next();
@@ -174,9 +174,6 @@ middlewareObj.checkUser = (req, res, next) => {
         }
     })
 }
-
-
-
 
 
 //* UPLOAD MIDDLEWARE
@@ -247,7 +244,7 @@ middlewareObj.ValidateImage = function (req, res, next) {
     }
 
 
-    Campground_Model.findById(req.params.id, (err, found) => {
+    Kost.findById(req.params.id, (err, found) => {
         const max = 3;
         if (found.image.length == max) {
             uploads(0)

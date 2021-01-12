@@ -1,16 +1,16 @@
 function hapus(x) {
 
 
-    //parse campground id
-    const pathname = window.location.pathname; //campground/14124124
+    //*parse kost id
+    const pathname = window.location.pathname; //kost/14124124
     const id = pathname.split('/')[2]; //124124214
-    //parse image id
+    //*parse image id
     const input = x.querySelector('input').value
     const imageId = input.split('/')[1]
 
-    //flash message
+    //*flash message
     const info = document.querySelector('#info')
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     const text = document.createTextNode(`${imageId} Deleted...`)
     div.className = 'alert alert-danger text-center';
     div.appendChild(text);
@@ -19,12 +19,13 @@ function hapus(x) {
     container.insertBefore(div, info);
    
 
-    const url = `/campground/${id}/KostKita/${imageId}`
+    const url = `/kost/${id}/KostKita/${imageId}`
 
+    //*axios
     axios({
             method: 'post',
             url: url,
-            //use form encoded not aplication/json
+            //*use form encoded not aplication/json
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -35,13 +36,13 @@ function hapus(x) {
 
         });
 
-
+//*remove image
     const img = x.parentNode.parentNode.querySelector('img')
     x.remove();
     img.remove();
 
 
-    //timeout flash message
+    //*timeout flash message
     function alert () {
         const alert = document.querySelector('.alert')
         alert.remove();

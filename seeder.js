@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 const User = require('./models/user');
-const Kost = require('./models/campground_export');
+const Kost = require('./models/kost');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv')
 
@@ -15,7 +15,7 @@ dotenv.config({ path: './config/config.env'});
 
 // connect to DB
 
-mongoose.connect('mongodb://localhost:27017/yelp_camp', {
+mongoose.connect('mongodb://localhost:27017/KostKita', {
 	useNewUrlParser: true,
      useFindAndModify: false,
      useCreateIndex: true,

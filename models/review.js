@@ -6,7 +6,7 @@ const reviewSchema = new mongoose.Schema({
         //*Setting the field type
         type: Number,
         //* Making the star rating required
-        required: "Please provide a rating (1-5 stars).",
+        required: [true, "Please provide a rating (1-5 stars)."],
         //* Defining min and max values
         min: 1,
         max: 5,
@@ -29,10 +29,10 @@ const reviewSchema = new mongoose.Schema({
         },
         username: String
     },
-    //* campground associated with the review
-    campground: {
+    //* kost associated with the review
+    kost: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Campground"
+        ref: "Kost"
     }
 }, {
     //* if timestamps are set to true, mongoose assigns createdAt and updatedAt fields to your schema, the type assigned is Date.

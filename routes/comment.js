@@ -1,40 +1,38 @@
-var express = require("express"),
+const express = require("express"),
 	router = express.Router({
 		mergeParams: true
 	}),
-	Campground_Model = require("../models/campground_export"),
-	Comment = require("../models/comment_export"),
+	Kost = require("../models/Kost"),
+	Comment = require("../models/Kost"),
 	Middleware = require("../middleware/index")
 
 
 
-//comment route new
+//*comment route new
 router.get("/new", Middleware.checkCommentExistence, (req, res) => {
-	Campground_Model.findById(req.params.id, (err, data) => {
+	Kost.findById(req.params.id, (err, data) => {
 		if (err || !data) { //handle error jika data tdk ketemu
 			req.flash("error", "Comment Not Found COMMENT")
 			res.redirect("back")
 			console.log(!data)
 		} else {
 			res.render("comment/new", {
-				camp_comment: data
+				kost: data
 			})
 		}
 	})
 })
 
-//add new comment
+//*add new comment
 router.post("/", Middleware.checkCommentExistence, (req, res) => {
 
-	Campground_Model.findById(req.params.id, (err, data) => {
-
-
+	Kost.findById(req.params.id, (err, data) => {
 		if (err) {
 			console.log(err)
-			res.redirect("/campground")
+			res.redirect("/kost")
 		} else {
-			var body_comment = req.body.comment
-			var new_comment = new Comment(body_comment)
+			let body_comment = req.body.comment
+			let new_comment = new Comment(body_comment)
 			//define id and author
 			new_comment.author.id = req.user._id
 			new_comment.author.username = req.user.username
@@ -44,22 +42,22 @@ router.post("/", Middleware.checkCommentExistence, (req, res) => {
 			data.comment.push(new_comment)
 			data.save()
 				.then(() => req.flash("success", "New Comment Added To " + data.name))
-				.then(() => res.redirect('/campground/' + data._id))
+				.then(() => res.redirect('/kost/' + data._id))
 		}
 
 	})
 
 })
 
-//EDIT COMMENT
-///campground/:id/comment/comment_id/edit
+//*EDIT COMMENT
+///*kost/:id/comment/comment_id/edit
 router.get("/:comment_id/edit", Middleware.checkCommentOwner, (req, res) => {
-	var id_campground = req.params.id
-	var id_comment = req.params.comment_id
-	Campground_Model.findById(id_campground, (err, data) => {
+	const id_kost = req.params.id
+	const id_comment = req.params.comment_id
+	Kost.findById(id_kost, (err, data) => {
 
 		if (err || !data) {
-			req.flash("error", "Campground Not Found COMMENT II")
+			req.flash("error", "Kost Not Found")
 			console.log(data)
 			return res.redirect("back")
 		}
@@ -69,43 +67,43 @@ router.get("/:comment_id/edit", Middleware.checkCommentOwner, (req, res) => {
 			console.log(err)
 		} else {
 			res.render("comment/edit", {
-				campground_id: id_campground,
+				kost: kost,
 				comment: data
 			})
 		}
 	})
 })
 
-//UPDATE COMMENT
-///campground/:id/comment/comment_id/
+//*UPDATE COMMENT
+///*kost/:id/comment/comment_id/
 router.put("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
-	var id_campground = req.params.id
-	var id_comment = req.params.comment_id
-	var data_new = req.body.commentEdit
+	const id_kost = req.params.id
+	const id_comment = req.params.comment_id
+	const data_new = req.body.commentEdit
 	Comment.findByIdAndUpdate(id_comment, data_new)
 		.then(() => req.flash("success", "Comment Succeed Update"))
-		.then(() => res.redirect("/campground/" + id_campground))
+		.then(() => res.redirect(`/kost/${id_kost}`))
 		.catch(error => console.log(error.message))
 
 
 })
 
-//DELETE COMMENT
-///campground/:id/comment/comment_id/
+//*DELETE COMMENT
+///*kost/:id/comment/comment_id/
 router.delete("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
 
-	var id_campground = req.params.id
-	var id_comment = req.params.comment_id
+	const id_kost = req.params.id
+	const id_comment = req.params.comment_id
 
 
-	//delete review in campground first
-	Campground_Model.findByIdAndUpdate(req.params.id, {
+	//*delete review in kost first
+	Kost.findByIdAndUpdate(id_kost, {
 		$pull: {
 			comment: id_comment
 		}
 	}, {
 		new: true
-	}).exec(function (err, campground) {
+	}).exec(function (err, kost) {
 		if (err) {
 			req.flash("error", err.message);
 			return res.redirect("back");
@@ -113,10 +111,10 @@ router.delete("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
 	})
 
 
-	// delete comment
+	//* delete comment
 	Comment.findByIdAndRemove(id_comment)
 		.then(() => req.flash("success", "Comment Succeed Delete"))
-		.then(() => res.redirect("/campground/" + id_campground))
+		.then(() => res.redirect(`/kost/" + ${id_kost}`))
 		.catch(error => console.log(error.message))
 
 

@@ -1,12 +1,10 @@
 function changeState() {
-// const x = Number(document.querySelector('.likes').innerText)
-// const sum = x + 1
-// x.innerText = sum
 
-    //**use this to parse camp id in url address bar */
-    const pathname = window.location.pathname; //campground/14124124
+
+    //**use this to parse kost id in url address bar */
+    const pathname = window.location.pathname; //kost/14124124
     const id = pathname.split('/')[2]; //124124214
-    const url = `/campground/${id}/like`
+    const url = `/kost/${id}/like`
     
     const btnLike = document.getElementById('btnLike');
     const btnUnlike = document.getElementById('btnUnlike');
@@ -45,6 +43,7 @@ function changeState() {
             console.log(res)
         });
 
+        //reload page
         location.reload()
     }
 

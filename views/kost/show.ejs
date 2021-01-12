@@ -17,29 +17,29 @@
 
         </div>
 
-        <!-- CAMPGROUND SECTION -->
+        <!--* KOST SECTION -->
         <div class="col-md-9" >
-            <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
+            <div id="kostCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                    <% if(show_camp.image.length == 0) { %>
+                    <% if(kost.image.length == 0) { %>
                         <div class="carousel-item active text-center">
                             <img src="/img/default.png" class="responsive-img" alt="">
                         </div>
                     <% } else { %>
 
-                    <% show_camp.image.forEach((img, i) => {  %>
+                    <% kost.image.forEach((img, i) => {  %>
                     <div class="carousel-item <%= i === 0 ? 'active' : ''%> text-center">
                         <img src="<%= img.url%>" class="responsive-img" alt="">
                     </div>
                     <% }) %>
     
                 </div>
-                <% if(show_camp.image.length > 1) {%>
-                <a class="carousel-control-prev" href="#campgroundCarousel" role="button" data-slide="prev">
+                <% if(kost.image.length > 1) {%>
+                <a class="carousel-control-prev" href="#kostCarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="carousel-control-next" href="#campgroundCarousel" role="button" data-slide="next">
+                <a class="carousel-control-next" href="#kostCarousel" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
@@ -47,20 +47,20 @@
             </div>
             <div class="img-thumbnail">
                 <div class="caption">
-                    <h4 class="float-right">Rp. <%= show_camp.price %>/month </h4>
+                    <h4 class="float-right">Rp. <%= kost.price %>/month </h4>
                     <h4>
-                        <a href=""> <%= show_camp.name %> </a>
+                        <a href=""> <%= kost.name %> </a>
                     </h4>
-                    <!-- like button -->
+                    <!--* like button -->
                     <div>
                         <button type="button" class="btn btn-sm btn-pink" data-toggle="modal"
-                            data-target="#campgroundLikes">
-                            <span>Total likes: <i class="fas fa-thumbs-up"></i> <span class="likes"><%= show_camp.likes.length %></span></span>
+                            data-target="#kostLikes">
+                            <span>Total likes: <i class="fas fa-thumbs-up"></i> <span class="likes"><%= kost.likes.length %></span></span>
                         </button>
-                        <!-- if user not login , display none -->
+                        <!--* if user not login , display none -->
                         <% if(currentUser) { %>
                         <div class="btn-group">
-                            <% if (currentUser && show_camp.likes.some(function (like) { return like.equals(currentUser._id) })) { %>
+                            <% if (currentUser && kost.likes.some(function (like) { return like.equals(currentUser._id) })) { %>
                             <button id="btnUnlike" class="btn btn-sm btn-success" onclick="changeState()">
                                 <span><i id="fas" class="fas fa-thumbs-up"></i> </span> You Like This Post
                             </button>
@@ -73,45 +73,44 @@
 
                         <% } %>
                     </div>
-                    <!--  -->
                     <p>
-                        <!-- waktu -->
-                        create by <strong><em><a href="/users/<%= show_camp.author.id %>"><%= show_camp.author.username %>,</a>
-                                <%=  moment(show_camp.createdAt).fromNow() %> </em></strong>
+                        <!--* waktu -->
+                        create by <strong><em><a href="/users/<%= kost.author.id %>"><%= kost.author.username %>,</a>
+                                <%=  moment(kost.createdAt).fromNow() %> </em></strong>
                     </p>
 
-                    <!-- campgroun rating -->
-                    <% if (show_camp.rating === 0) { %>
+                    <!--* kost rating -->
+                    <% if (kost.rating === 0) { %>
 
                     <% } else { %>
                     <p>
                         <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star <% if (show_camp.rating > 1.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (show_camp.rating > 2.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (show_camp.rating > 3.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (show_camp.rating > 4.5) { %> checked <% } %>"></span>
-                        <em>(total reviews: <%= show_camp.reviews.length %>)</em>
+                        <span class="fa fa-star <% if (kost.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (kost.rating > 2.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (kost.rating > 3.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (kost.rating > 4.5) { %> checked <% } %>"></span>
+                        <em>(total reviews: <%= kost.reviews.length %>)</em>
                     </p>
                     <p>
-                        <!-- to fixed decimal -->
-                        Current campground rating: <strong><%= show_camp.rating.toFixed(2) %></strong>
+                        <!--* to fixed decimal -->
+                        Current Kost rating: <strong><%= kost.rating.toFixed(2) %></strong>
                     </p>
                     <% } %>
 
-                    <!-- Description -->
+                    <!--* Description -->
                     <div>
-                        <%- show_camp.sanitizedHtml %>
+                        <%- kost.sanitizedHtml %>
                     </div>
 
 
-                    <!-- edit and delete campground -->
+                    <!--* edit and delete Kost -->
                     <div style="padding: 10px;">
-                        <% if(currentUser && show_camp.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
-                        <!-- edit button -->
-                        <a class="btn btn-sm btn-outline-warning" href="/campground/<%= show_camp._id %>/edit">Edit</a>
-                        <!-- delete button -->
+                        <% if(currentUser && kost.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
+                        <!-- *edit button -->
+                        <a class="btn btn-sm btn-outline-warning" href="/kost/<%= kost._id %>/edit">Edit</a>
+                        <!--* delete button -->
                         <form style="display: inline-block" class="form-inline"
-                            action="/campground/<%= show_camp._id %>?_method=DELETE " method="POST">
+                            action="/kost/<%= kost._id %>?_method=DELETE " method="POST">
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
                         </form>
                         <% } %>
@@ -120,16 +119,16 @@
                 </div>
             </div>
 
-            <!--REVIEW section-->
+            <!--*REVIEW section-->
             <div class="card card-body bg-light">
                 <div class="showCollapse">
                     <div class="showCollapseChild">
                         <button type="button" class="btn btn-success" data-toggle="modal"
-                            data-target="#campgroundReview">
+                            data-target="#kostReview">
                             <span><i class="fa fa-star"></i></span> Show All Review</a>
                         </button>
                     </div>
-                    <!-- if no user login -->
+                    <!--* if no user login -->
                     <% if(!currentUser) { %>
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse"
@@ -139,10 +138,10 @@
                     </div>
 
                     <% } %>
-                    <!-- if user login -->
+                    <!--* if user login -->
                     <% if(currentUser) { %>
                     <div class="showCollapseChild">
-                        <a class="btn btn-success" href="/campground/<%= show_camp._id %>/reviews/new">
+                        <a class="btn btn-success" href="/kost/<%= kost._id %>/reviews/new">
                         Add new Review</a>
                     </div>
                     <% } %>
@@ -150,7 +149,7 @@
                 </div>
                 <div class="collapse" id="collapseCreateReviewNouser">
                     <div class="card card-body" style="border-left: 5px solid #00C851;">
-                        <!--If the user is not logged in, direct him to the login page-->
+                        <!--*If the user is not logged in, direct him to the login page-->
                         <h5> You need to login before you can review. <a href="/login">Click here</a> to go to
                             the
                             login page.</h5>
@@ -162,17 +161,17 @@
                     <h4>Latest reviews</h4>
                     <hr style="margin-top: 0;">
 
-                    <!-- below is code to disable button if user already post a review -->
-                    <%# if (currentUser && show_camp.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %>
+                    <!--* below is code to disable button if user already post a review -->
+                    <%# if (currentUser && kost.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %>
                     <!-- disabled <%# } %> -->
 
-                    <% if (show_camp.rating === 0) { %>
+                    <% if (kost.rating === 0) { %>
                     <h6>
                         <em>No reviews yet.</em>
                     </h6>
                     <% } else { %>
                     <!-- show review only 3-->
-                    <% show_camp.reviews.slice(0, 3).forEach(function(review){ %>
+                    <% kost.reviews.slice(0, 3).forEach(function(review){ %>
                     <span class="float-right"><em><%= moment(review.updatedAt).fromNow() %></em></span>
                     <div>Review by: <span class="badge"><i class="fa fa-user-circle"></i></span>
                         <strong><%= review.author.username %></strong></div>
@@ -188,9 +187,9 @@
                     <div style="padding: 10px;">
                         <% if(currentUser && review.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-xs btn-warning"
-                            href="/campground/<%=show_camp._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                            href="/kost/<%=kost._id %>/reviews/<%=review._id %>/edit">Edit</a>
                         <form id="delete-button"
-                            action="/campground/<%=show_camp._id %>/reviews/<%=review._id %>?_method=DELETE"
+                            action="/kost/<%=kost._id %>/reviews/<%=review._id %>?_method=DELETE"
                             method="POST">
                             <input type="submit" class="btn btn-xs btn-danger" value="Delete">
                         </form>
@@ -201,20 +200,20 @@
                 </div>
 
             </div>
-            <!--REVIEW section END-->
+            <!--*REVIEW section END-->
 
 
 
             <!--* NEW COMMENT SECTION -->
             <div class="card card-body bg-light">
-                <!--Setting up the add new comment button that is used for collapsing-->
+                <!--*Setting up the add new comment button that is used for collapsing-->
                 <div class="showCollapse">
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseShowComment"
                             aria-expanded="false" aria-controls="collapseComment">
                             <span><i class="fas fa-comment"></i></span> Show Comment</a>
                     </div>
-                    <!-- if no user sign in -->
+                    <!--* if no user sign in -->
                     <% if (!currentUser) { %>
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseCreateComment"
@@ -224,40 +223,40 @@
                     <% console.log("User Not Login Yet") %>
 
                     <% } %>
-                    <!-- if user already comment -->
-                    <% if (currentUser && show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}) ) {   %>
+                    <!--* if user already comment -->
+                    <% if (currentUser && kost.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}) ) {   %>
 
                     <div class="showCollapseChild">
-                        <a class="btn btn-success" href="/campground/<%= show_camp._id %>/comment/new">
+                        <a class="btn btn-success" href="/kost/<%= kost._id %>/comment/new">
                              Add new comment</a>
                     </div>
-                    <% console.log("User Already Make Comment : " + show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
+                    <% console.log("User Already Make Comment : " + kost.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
                     <% } %>
-                    <!-- if user have not comment, it will be collapse button -->
-                    <% if (currentUser && !show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}) ) { %>
+                    <!--* if user have not comment, it will be collapse button -->
+                    <% if (currentUser && !kost.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}) ) { %>
 
                     <div class="showCollapseChild">
                         <a class="btn btn-success" role="button" data-toggle="collapse" href="#collapseCreateComment"
                             aria-expanded="false" aria-controls="collapseComment">
                              Add New Comment</a>
                     </div>
-                    <% console.log("User Not Make Any Comment : " + show_camp.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
+                    <% console.log("User Not Make Any Comment : " + kost.comment.some (function (comment) {return comment.author.id.equals(currentUser._id)}))  %>
 
                     <% } %>
                 </div>
 
-                <!--Collapse Add a comment form START-->
+                <!--*Collapse Add a comment form START-->
                 <div class="collapse" id="collapseCreateComment">
                     <div class="card card-body" style="border-left: 5px solid #00C851;">
                         <% if(!currentUser) { %>
-                        <!--If the user is not logged in, direct him to the login page-->
+                        <!--*If the user is not logged in, direct him to the login page-->
                         <h5> You need to login before you can comment. <a href="/login">Click here</a> to go to the
                             login page.</h5>
                         <% } %>
                         <% if(currentUser) { %>
-                        <!--If the user is logged in, show the new comment form-->
+                        <!--*If the user is logged in, show the new comment form-->
                         <h4>Write your comment </h4>
-                        <form id="add-comment-form" action="/campground/<%= show_camp._id %>/comment" method="POST">
+                        <form id="add-comment-form" action="/kost/<%= kost._id %>/comment" method="POST">
                             <div class="form-group">
                                 <input class="form-control" type="text" disabled value="<%= currentUser.username %>">
                             </div>
@@ -272,31 +271,31 @@
                         <% } %>
                     </div>
                 </div>
-                <!--Collapse Add a comment form END-->
+                <!--* Collapse Add a comment form END-->
                 <br>
                 <div class="comment-content">
                     <h4>Latest comment</h4>
                     <hr style="margin-top: 0;">
 
-                    <!--Check if there are comments, if there are none say no comments.-->
-                    <% if (show_camp.comment.length === 0) { %>
+                    <!--*Check if there are comments, if there are none say no comments.-->
+                    <% if (kost.comment.length === 0) { %>
                     <h6>
                         <em>No comments yet.</em>
                     </h6>
                     <% } %>
 
-                    <!--Display comments by looping through them-->
+                    <!--*Display comments by looping through them-->
                     <div class="collapse" id="collapseShowComment">
 
-                        <% show_camp.comment.forEach(function(comment) { %>
-                        <!--Print out the author username-->
+                        <% kost.comment.forEach(function(comment) { %>
+                        <!--*Print out the author username-->
                         <div>
                             Comment By : <span><i class="fa fa-user-circle" aria-hidden="true"></i></span> <strong>
                                 <%= comment.author.username %> </strong>
-                            <!--Show when the comment was made-->
+                            <!--*Show when the comment was made-->
                             <span class="float-right"><%= moment(comment.updatedAt).fromNow() %></span>
                         </div>
-                        <!--Printing the comment-->
+                        <!--*Printing the comment-->
                         <div style="text-align: justify;" class="card card-body">
                             <p>
                                 <%= comment.text %>
@@ -304,30 +303,30 @@
                         </div>
 
                         <div style="padding: 10px;">
-                            <!--If the visitor is logged in and the owner of the comment, show the edit and delete buttons-->
+                            <!--*If the visitor is logged in and the owner of the comment, show the edit and delete buttons-->
                             <% if (currentUser && currentUser._id.equals(comment.author.id) || currentUser && currentUser.isAdmin) { %>
 
-                            <!--Edit button used for collapsing the edit comment form-->
+                            <!--*Edit button used for collapsing the edit comment form-->
                             <a class="btn btn-sm btn-warning" role="button" data-toggle="collapse"
                                 href="#collapseEdit<%= comment._id %>" aria-expanded="false"
                                 aria-controls="collapse<%= comment._id %>">
                                 Edit</a>
 
-                            <!--Delete comment button-->
+                            <!--*Delete comment button-->
                             <form id="delete-form"
-                                action="/campground/<%= show_camp._id %>/comment/<%= comment._id %>?_method=DELETE"
+                                action="/kost/<%= kost._id %>/comment/<%= comment._id %>?_method=DELETE"
                                 method="POST" style="display: inline;">
                                 <button class="btn btn-sm btn-danger">Delete</button>
                             </form>
 
-                            <!--Edit comment form-->
+                            <!--*Edit comment form-->
                             <div class="collapse" id="collapseEdit<%= comment._id %>">
                                 <div class="card card-body bg-light"
                                     style="border-left: 5px solid #ffbb33; margin-top: 15px;">
                                     <h4>Edit your comment <span><i class="fa fa-edit"></i></span></h4>
 
                                     <form id="edit-comment-form<%= comment._id %>"
-                                        action="/campground/<%= show_camp._id %>/comment/<%= comment._id %>?_method=PUT"
+                                        action="/kost/<%= kost._id %>/comment/<%= comment._id %>?_method=PUT"
                                         method="POST">
 
                                         <div class="form-group">
@@ -352,13 +351,13 @@
                     </div>
                 </div>
             </div>
-            <!--COMMENT SECTION END-->
+            <!--*COMMENT SECTION END-->
 
 
         </div>
 
         <div style="margin-top: 10px;">
-            <a class="btn btn-default" href="/campground"><i class="fa fa-arrow-left"></i> Go back</a>
+            <a class="btn btn-default" href="/kost"><i class="fa fa-arrow-left"></i> Go back</a>
         </div>
     </div>
 </div>
@@ -367,7 +366,7 @@
 <!-- * line no 2 is for hook in back end, parse data to string and call in back -->
 <script>
 const mapToken = '<%-process.env.MAPBOX_API_KEY%>';
-const campground = <%- JSON.stringify(show_camp) %>
+const Kost = <%- JSON.stringify(kost) %>
 
 </script>
 

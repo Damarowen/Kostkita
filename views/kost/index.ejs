@@ -1,0 +1,56 @@
+<%- include ('../partials/header')  %>
+
+
+
+<div class="jumbotron jumbotron-fluid ">
+	<div class="container">
+		<h1 class="head text-center">KostKita Menyediakan fasilitas Kost Yang Lengkap dan Murah</h1>
+		<hr class="my-3">
+		<% if(currentUser || currentUser && currentUser.isAdmin) { %>
+
+		<p class="lead text-center">
+			<a class="btn btn-pink btn-lg" href="/kost/new" role="button">Entry New Kost</a>
+		</p>
+	<% } %> 
+	</div>
+</div>
+
+<div class="container">
+	<div class="row text-center">
+		<% kost.forEach(function(kost) { %>
+		<div class="col-lg-4">
+			<div class="card">
+				<!-- ** if user not upload photo, photo using img default -->
+				<% if(kost.image == 0){%> 
+					<img class="card-img-top" src="/img/default.png" alt="Card image cap">
+					<% } else if(kost.image.length > 0) { %>
+						<img class="card-img-top" src="<%= kost.image[0].url %>" alt="Card image cap">
+					<% } %>
+				<div class="card-body">
+					<h5 class="card-title"><strong><%= kost.name %></strong></h5>
+					<div>
+						<span > <i class="fa fa-thumbs-up"> </i> <%= kost.likes.length %> </span>
+					</div>
+					<% if (kost.rating === 0) { %>
+						<em>No reviews yet.</em>
+						<% } else { %>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star <% if (kost.rating > 1.5) { %> checked <% } %>"></span>
+						<span class="fa fa-star <% if (kost.rating > 2.5) { %> checked <% } %>"></span>
+						<span class="fa fa-star <% if (kost.rating > 3.5) { %> checked <% } %>"></span>
+						<span class="fa fa-star <% if (kost.rating > 4.5) { %> checked <% } %>"></span>
+						<% } %>
+						<br>
+						<br>
+					<a href="/kost/<%= kost._id %>" class="btn btn-pink">Description</a>
+				</div>
+			</div>
+		</div>
+		<% }) %>
+	</div>
+</div>
+
+
+<%- include ('../partials/footer')  %>
+
+

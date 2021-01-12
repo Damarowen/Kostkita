@@ -9,16 +9,16 @@ const express = require("express"),
 	methodOverride = require("method-override"),
 	passport = require("passport"),
 	localStrategy = require("passport-local"),
-	User = require("./models/user"),
+	User = require("./models/User"),
 	flash = require("connect-flash"),
 	path = require('path')
 
 
 
 //requiring routes
-const campgroundRoutes = require("./routes/campground")
-const reviewRoutes = require("./routes/reviews")
+const kostKitaRoutes = require("./routes/kostKita")
 const commentRoutes = require("./routes/comment")
+const reviewRoutes = require("./routes/reviews")
 const indexRoutes = require("./routes/auth")
 const userProfileRoutes = require("./routes/user_profile")
 
@@ -81,9 +81,9 @@ app.use(flash());
 
 //ROUTERS
 app.use("/", indexRoutes, userProfileRoutes); //parameter pertama akan menimpa url
-app.use("/campground", campgroundRoutes);
-app.use("/campground/:id/comment", commentRoutes);
-app.use("/campground/:id/reviews", reviewRoutes);
+app.use("/kost", kostKitaRoutes);
+app.use("/kost/:id/comment", commentRoutes);
+app.use("/kost/:id/reviews", reviewRoutes);
 
 
 // ** 404 not found page
