@@ -94,21 +94,12 @@ router.put("/:comment_id", Middleware.checkCommentOwner, (req, res) => {
 ///*kost/:id/comment/comment_id/
 router.delete("/:comment_id", Middleware.checkCommentOwner, async function (req, res) {
 
+
 	const id_kost = req.params.id
 	const id_comment = req.params.comment_id
 
 
-//* delete comment
-	await Comment.findByIdAndDelete(id_comment)
-		.then(() => console.log("this is comment id" + id_comment))
-		.then(() => console.log("this is id kost" + id_kost))
-		.then(() => req.flash("success", "Comment Succeed Delete"))
-		.then(() => res.redirect(`/kost/" + ${id_kost}`))
-		.catch(error => console.log(error.message))
-
-
-	//*delete review in kost first
-	await Kost.findByIdAndUpdate(id_kost, {
+	await Kost.findByIdAndUpdate(req.params.id, {
 		$pull: {
 			comment: id_comment
 		}
@@ -116,10 +107,10 @@ router.delete("/:comment_id", Middleware.checkCommentOwner, async function (req,
 		new: true
 	})
 
-	
-
-
-
+	await Comment.findByIdAndRemove(id_comment)
+		.then(() => req.flash("success", "Comment Succeed Delete"))
+		.then(() => res.redirect(`/kost/${id_kost}`))
+		.catch(error => console.log(error.message))
 
 })
 
