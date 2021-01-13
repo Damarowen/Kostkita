@@ -1,3 +1,4 @@
+require('dotenv').config()
 
 
 
@@ -6,28 +7,14 @@ const User = require('./models/User');
 const Kost = require('./models/Kost');
 const Review = require('./models/Review');
 const Comment = require('./models/Comment');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv')
-
-// koad env vars
-dotenv.config({ path: './config/config.env'});
-
-//load models
-
 
 // connect to DB
+const connectDB = require('./config/db')
 
-mongoose.connect('mongodb://localhost:27017/KostKita', {
-	useNewUrlParser: true,
-     useFindAndModify: false,
-     useCreateIndex: true,
-     useUnifiedTopology: true
- })
- 
+// database setup cloud
+connectDB();
  
  // Read JSON files
-
-
 const user = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
 );
@@ -35,7 +22,6 @@ const user = JSON.parse(
 const kost = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/kost.json`, 'utf-8')
 );
-
 
 
 

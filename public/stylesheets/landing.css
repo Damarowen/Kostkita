@@ -1,6 +1,3 @@
-body {
-    /* background-color: #000; */
-  }
 
   #landing-header {
     z-index: 1;
@@ -40,23 +37,24 @@ body {
   }
 
   .slideshow li:nth-child(1) { 
-    background-image: url(https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+    background-image: url(https://images.unsplash.com/photo-1587896816473-11270b3b9f98?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);
     /* 3 detik masuk, 3 detik keluar = it takes 6s */ 
   }
   .slideshow li:nth-child(2) { 
-    background-image: url(https://images.unsplash.com/photo-1545569341-9eb8b30979d9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+    background-image: url(https://images.unsplash.com/photo-1610450107541-7d51654312ee?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1190&q=80);
     animation-delay: 6s; /* keluar setelah 6s */
   }
   .slideshow li:nth-child(3) { 
-    background-image: url(https://images.unsplash.com/photo-1528360983277-13d401cdc186?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+    background-image: url(https://images.unsplash.com/photo-1526615130707-b75efc81f4fe?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80);
     animation-delay: 12s; 
   }
   .slideshow li:nth-child(4) { 
-    background-image: url(https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80);
+    background-image: url(https://images.unsplash.com/photo-1555899434-94d1368aa7af?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);
     animation-delay: 18s; 
   }
   .slideshow li:nth-child(5) { 
-    background-image: url(https://i.imgur.com/oqum7aO.png);
+    background-image: url(  https://images.unsplash.com/photo-1555333145-4acf190da336?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80
+    );
     animation-delay: 24s; 
   }
 

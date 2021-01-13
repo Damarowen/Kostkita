@@ -22,15 +22,21 @@ html {
     color: black;
 }
 
+
+
 .navbar-light .navbar-nav .nav-link:hover {
     color: white;
 }
 
-
-
-.custom-file-container__image-preview {
-    background-size: contain !important;
+.fixed-top {
+    position: sticky;
+    margin-bottom: 10px;
 }
+
+.navbar-brand img {
+    width: 22vw;
+}
+
 
 .date {
     display: flex;
@@ -68,8 +74,6 @@ html {
     margin-bottom: 15px;
 }
 
-
-
 .jumbotron {
     background-image: url(/img/background.jpg);
     background-size: cover;
@@ -77,23 +81,14 @@ html {
     margin-top: -20px;
 }
 
+/* head tulisan di atas jumbotron */
+
 .head {
     color: white;
     text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
     font-size: 3.5em;
 }
 
-
-
-
-.height {
-    height: 15em;
-}
-
-.fixed-top {
-    position: sticky;
-    margin-bottom: 10px;
-}
 
 form {
     margin-top: 10px;
@@ -130,22 +125,13 @@ form {
     background: rgba(235, 124, 124, 0.527);
 }
 
+
+/* search bar */
 .cari {
     display: inline;
     width: 50%;
 }
 
-.footer {
-    padding-top: 20px;
-    margin-top: 20px;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    bottom: 0;
-    /** Set the fixed height of the footer here */
-    height: 60px;
-    background-color: var(--nav);
-}
 
 .showCollapse {
     display: flex;
@@ -250,11 +236,13 @@ form {
     opacity: 1;
 }
 
+
+/* img carousel */
+
 .carousel-item>img {
     max-width: 100%;
     height: auto;
 }
-
 
 
 .carousel-control-next-icon,
@@ -263,15 +251,18 @@ form {
 }
 
 
-
-/* * END */
-
-
-
-
-.navbar-brand img {
-    width: 22vw;
+.footer {
+    padding-top: 20px;
+    margin-top: 20px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    /** Set the fixed height of the footer here */
+    height: 60px;
+    background-color: var(--nav);
 }
+
 
 
 

@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
+const dbUrl = process.env.DB_URI;
+
+
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect('mongodb://localhost:27017/KostKita', {
+    const conn = await mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
