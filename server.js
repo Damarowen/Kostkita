@@ -11,6 +11,7 @@ const express = require("express"),
 	localStrategy = require("passport-local"),
 	User = require("./models/User"),
 	flash = require("connect-flash"),
+	session = require('express-session'),
 	path = require('path')
 
 
@@ -47,11 +48,25 @@ app.use(flash())
 
 //PASSPORT CONFIGURATION
 
-app.use(require("express-session")({ //passing ke app use
-	secret: "xx",
-	resave: false,
-	saveUninitialized: false
-}))
+
+const sessionConfig = {
+    name: 'session',
+    secret: process.env.SECRET || 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+		// secure: true,
+		// 1000 = 1000 milidetik dalam 1 detik
+		// 60 = 60 detik dalam 1 menit
+		// 60 = 60 menit dalam 1 jam
+		// 1 = 1 jam
+        expires: Date.now() + 1000 * 60 * 60 * 1,
+        maxAge: 1000 * 60 * 60 * 1
+    }
+}
+
+app.use(session(sessionConfig))
 
 app.use(passport.initialize()); //passing ke app use
 app.use(passport.session()); //passing ke app use

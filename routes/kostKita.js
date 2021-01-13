@@ -23,8 +23,15 @@ router.get("/", async function (req, res) {
     try {
         if (req.query.cari) {
             const query = new RegExp(escapeRegex(req.query.cari), 'gi');
-            const data = await Kost.find({$or: [{name: query,}, {location: query}, {"author.username":query}]})
-console.log(data)
+            const data = await Kost.find({
+                $or: [{
+                    name: query,
+                }, {
+                    location: query
+                }, {
+                    "author.username": query
+                }]
+            })
             res.render("kost/index", {
                 data
             });
@@ -37,16 +44,12 @@ console.log(data)
             res.render("kost/index", {
                 data
             })
-
         }
-
     } catch (err) {
         console.log(err)
-        req.flash("error", "error");
+        req.flash("error", `${err}`);
         res.redirect(`back`)
     }
-
-
 })
 
 
@@ -57,8 +60,6 @@ console.log(data)
 router.get("/new", Middleware.isLogggedIn, function (req, res) {
     res.render("kost/new")
 })
-
-
 
 
 //**CREATE ROUTE - ADD NEW KOST
@@ -127,7 +128,7 @@ router.get("/:id", async function (req, res) {
     } catch (err) {
         //* display error from mongoose validation
         console.log(err)
-        req.flash("error", "error");
+        req.flash("error", `${err}`);
         res.redirect(`back`)
     }
 })
@@ -173,7 +174,7 @@ router.put("/:id", Middleware.ValidateImage, async function (req, res) {
         // //* display error from mongoose validation
         // const message = Object.values(err.errors).map(val => val);
         console.log(err)
-        req.flash("error", `err`);
+        req.flash("error", `${err}`);
         res.redirect(`back`)
     }
 })
@@ -227,7 +228,7 @@ router.delete("/:id", Middleware.checkKostOwner, function (req, res) {
 
         } catch (err) {
             console.log(err)
-            req.flash("error", err.message);
+            req.flash("error", `${err}`);
             return res.redirect("back");
         }
 
@@ -257,7 +258,7 @@ router.post("/:id/KostKita/:imageid", async function (req, res) {
         console.log(`${file} Deleted...`)
     } catch (err) {
         console.log(err)
-        req.flash("error", err.message);
+        req.flash("error", `${err}`);
         return res.redirect("back");
     }
 })
@@ -298,7 +299,7 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
         });
     } catch (err) {
         console.log(err)
-        req.flash("error", err.message);
+        req.flash("error", `${err}`);
         return res.redirect("back");
 
     }
@@ -306,6 +307,8 @@ router.post("/:id/like", Middleware.isLogggedIn, function (req, res) {
 });
 
 
+
+//* function for search
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
