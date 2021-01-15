@@ -207,7 +207,7 @@ const upload = multer({
 })
 
 middlewareObj.uploads = function (req, res, next) {
-    upload.array('image', 5)(req, res, (err) => {
+    upload.array('image', 3)(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             console.log(err)
             req.flash("error", "File is too big or Max file choose reached");
