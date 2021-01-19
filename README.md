@@ -2,6 +2,8 @@
 
 KostKita is a website to search Kost ( Guest House ) around your corner
 
+reference tp this project was YelpCamp by Colt Steele 
+
 KostKita has a feature:
 
 1. Admin
@@ -19,7 +21,9 @@ KostKita build using
 4. Mapbox
 5. Axios
 6. PasportJS
-7. other tiny stuff ..
+7. MongoDB with Mongoose
+
+and other tiny stuff ..
 
 Instalattion
 
